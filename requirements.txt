@@ -1,0 +1,3 @@
+OCC >= 0.16  # PythonOCC
+scipy
+wx >= 2.8  # to run some examples
