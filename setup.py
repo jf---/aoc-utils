@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8**
 
-"""setuptools based setup module for occutils
+"""setuptools based setup module for aocutils
 
 References
 ----------
@@ -97,8 +97,8 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=['occutils', 'occutils.analyze', 'occutils.brep', 'occutils.display', 'occutils.geom',
-              'occutils.operations'],
+    packages=['aocutils', 'aocutils.analyze', 'aocutils.brep', 'aocutils.display', 'aocutils.geom',
+              'aocutils.operations'],
 
     # Alternatively, if you want to distribute just a my_module.py, uncomment
     # this:
