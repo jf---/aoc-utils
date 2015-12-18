@@ -5,7 +5,7 @@ aoc-utils
 
 .. image:: http://img.shields.io/badge/Status-development-ff3300.svg
    :alt: Development
-.. image:: https://img.shields.io/pypi/dm/occutils.svg
+.. image:: https://img.shields.io/pypi/dm/aocutils.svg
    :alt: Downloads
 .. image:: https://travis-ci.org/floatingpointstack/aoc-utils.svg
    :alt: Build Status
@@ -62,19 +62,19 @@ aocutils version and target PythonOCC version
 +------------------+-------------------+
 | aocutils version | PythonOCC version |
 +==================+===================+
-| 0.1.1.*          | 0.16.2            |
+| 0.1.*            | 0.16.2            |
 +------------------+-------------------+
 
 Examples
 --------
 
-The examples are in the *examples* folder at the Github repository (https://github.com/floatingpointstack/aocutils).
+The examples are in the *examples* folder at the Github repository (https://github.com/floatingpointstack/aoc-utils).
 
 The wx backend (wxPython) backend is used for the examples that display a UI.
 You may easily change this behaviour to use pyqt4 or PySide by changing the backend in the call to init_display().
 
-.. image:: https://raw.githubusercontent.com/floatingpointstack/aocutils/master/img/geomplate.jpg
+.. image:: https://raw.githubusercontent.com/floatingpointstack/aoc-utils/master/img/geomplate.jpg
    :alt: geomplate
 
-.. image:: https://raw.githubusercontent.com/floatingpointstack/aocutils/master/img/surfaces.jpg
+.. image:: https://raw.githubusercontent.com/floatingpointstack/aoc-utils/master/img/surfaces.jpg
    :alt: surfaces

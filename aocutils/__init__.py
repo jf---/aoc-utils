@@ -17,5 +17,5 @@ __version__ = "0.1.0"
 __author__ = "Guillaume Florent, Adam Lange, Jelle Feringa, Thomas Paviot"
 __author_email__ = "florentsailing@gmail.com"
 __license__ = 'GPL v3'
-__url__ = "https://github.com/floatingpointstack/aocutils"
-__download_url__ = "https://github.com/floatingpointstack/aocutils/releases/tag/" + __version__
+__url__ = "https://github.com/floatingpointstack/aoc-utils"
+__download_url__ = "https://github.com/floatingpointstack/aoc-utils/releases/tag/" + __version__
