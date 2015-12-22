@@ -754,6 +754,7 @@ class Edge(aocutils.brep.base.BaseObject):
         ------
         RuntimeError
             If the curvature is not defined
+
         """
         # NOT SO SURE IF THIS IS THE SAME THING!!!
         self.brep_local_props.SetParameter(u)

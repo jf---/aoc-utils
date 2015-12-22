@@ -5,8 +5,6 @@ General
 -> CI
 -> Coverage
 
-README.rst -> better presentation of pip install
-
 Python 3 tests
 
 
@@ -15,6 +13,7 @@ tests
 doctests?
 more tests for *_make.py
 operations
+more analyze tests (cf. waterline)
 
 examples
 --------
@@ -31,6 +30,8 @@ display
 -------
 Store default backend in a python file and use this instead of hardcoding wx all over the place
 This is similar to the tolerance.py file
+
+display with topology info (nb vetices, nb edges ....)
 
 _fixme/triangulation.py
 -----------------------
