@@ -28,10 +28,10 @@ examples/geomplate.py
 
 display
 -------
-Store default backend in a python file and use this instead of hardcoding wx all over the place
-This is similar to the tolerance.py file
+******** default backend in a python file and use this instead of hardcoding wx all over the place
+******** This is similar to the tolerance.py file
 
-display with topology info (nb vetices, nb edges ....)
+display with topology info (nb vertices, nb edges ....)
 
 _fixme/triangulation.py
 -----------------------

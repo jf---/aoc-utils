@@ -35,8 +35,10 @@ import aocutils.brep.wire_make
 import aocutils.brep.face_make
 import aocutils.brep.vertex_make
 import aocutils.topology
+import aocutils.display.defaults
 
-display, start_display, add_menu, add_function_to_menu = OCC.Display.SimpleGui.init_display("wx")
+backend = aocutils.display.defaults.backend
+display, start_display, add_menu, add_function_to_menu = OCC.Display.SimpleGui.init_display(backend)
 
 
 class IGESImporter(object):

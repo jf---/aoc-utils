@@ -1,16 +1,22 @@
 #!/usr/bin/python
 # coding: utf-8
 
-r"""
-"""
+r"""Points interpolation examples"""
+
+import logging
 
 import OCC.Display.SimpleGui
 import OCC.gp
 
 import aocutils.operations.interpolate
 import aocutils.geom.curve
+import aocutils.display.defaults
 
-display, start_display, add_menu, add_function_to_menu = OCC.Display.SimpleGui.init_display("wx")
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s :: %(levelname)6s :: %(module)20s :: %(lineno)3d :: %(message)s')
+
+backend = aocutils.display.defaults.backend
+display, start_display, add_menu, add_function_to_menu = OCC.Display.SimpleGui.init_display(backend)
 
 point_1 = OCC.gp.gp_Pnt(0, 0, 0)
 point_2 = OCC.gp.gp_Pnt(10, 0, 0)

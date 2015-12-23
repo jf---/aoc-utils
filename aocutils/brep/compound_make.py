@@ -12,7 +12,7 @@ def compound(topo):
 
     Parameters
     ----------
-    topo : list of TopoDS_*
+    topo : list[TopoDS_*]
 
     Returns
     -------

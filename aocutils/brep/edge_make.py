@@ -110,7 +110,7 @@ def line(pnt1, pnt2):
     return edge(pnt1, pnt2)
 
 
-def geodesic_path(pnt_a, pnt_b, kbe_face, n_segments=20, _tolerance=0.1, n_iter=20):
+def geodesic_path(pnt_a, pnt_b, aoc_face, n_segments=20, _tolerance=0.1, n_iter=20):
     r"""
 
     Parameters
@@ -119,8 +119,8 @@ def geodesic_path(pnt_a, pnt_b, kbe_face, n_segments=20, _tolerance=0.1, n_iter=
         point to start from
     pnt_b
         point to move towards
-    kbe_face
-        kbe.face.Face on which `edgA` and `edgB` lie
+    aoc_face
+        oacutils.brep.face.Face on which `edgA` and `edgB` lie
     n_segments : int
         the number of segments the geodesic is built from
     _tolerance : float
@@ -133,15 +133,15 @@ def geodesic_path(pnt_a, pnt_b, kbe_face, n_segments=20, _tolerance=0.1, n_iter=
     TopoDS_Edge
 
     """
-    uv_a, srf_pnt_a = kbe_face.project_vertex(pnt_a)
-    uv_b, srf_pnt_b = kbe_face.project_vertex(pnt_b)
+    uv_a, srf_pnt_a = aoc_face.project_vertex(pnt_a)
+    uv_b, srf_pnt_b = aoc_face.project_vertex(pnt_b)
 
     path = []
     for i in range(n_segments):
         t = i / n_segments
         u = uv_a[0] + t*(uv_b[0] - uv_a[0])
         v = uv_a[1] + t*(uv_b[1] - uv_a[1])
-        path.append(kbe_face.parameter_to_point(u, v))
+        path.append(aoc_face.parameter_to_point(u, v))
 
     def project_pnts(x):
         r"""Project points
@@ -154,7 +154,7 @@ def geodesic_path(pnt_a, pnt_b, kbe_face, n_segments=20, _tolerance=0.1, n_iter=
         -------
 
         """
-        return [kbe_face.project_vertex(j)[1] for j in x]
+        return [aoc_face.project_vertex(j)[1] for j in x]
 
     def poly_length(x):
         r"""Poly length

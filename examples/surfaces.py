@@ -14,8 +14,10 @@ import aocutils.brep.face_make
 import aocutils.brep.edge_make
 import aocutils.brep.vertex_make
 import aocutils.brep.wire_make
+import aocutils.display.defaults
 
-display, start_display, add_menu, add_function_to_menu = OCC.Display.SimpleGui.init_display("wx")
+backend = aocutils.display.defaults.backend
+display, start_display, add_menu, add_function_to_menu = OCC.Display.SimpleGui.init_display(backend)
 
 
 def n_sided_patch():
@@ -65,7 +67,7 @@ def n_sided_patch():
 
     display.DisplayShape(edges)
     display.DisplayShape(verts)
-    display.DisplayShape(f1, update=True)
+    display.DisplayShape(f1, color=aocutils.display.defaults.fp_dark_blue, update=True)
 
 if __name__ == '__main__':
     n_sided_patch()

@@ -14,28 +14,6 @@ from __future__ import print_function
 import OCC.Display.SimpleGui
 
 
-def available_backends():
-    r"""List of available backends"""
-    backends = list()
-    try:
-        import wx
-        backends.append("wx")
-    except ImportError:
-        print("No wx backend")
-    try:
-        import PySide
-        backends.append("qt-pyside")
-    except ImportError:
-        print("No PySide backend")
-    try:
-        import PyQt4
-        backends.append("qt-pyqt4")
-    except ImportError:
-        print("No PyQt4 backend")
-
-    return backends
-
-
 def safe_yield():
     r"""Reimplementation of a function that once existed in OCC.Display.SimpleGui"""
     if OCC.Display.SimpleGui.get_backend() == 'wx':

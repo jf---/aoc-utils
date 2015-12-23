@@ -64,6 +64,7 @@ def shell_from_faces(list_of_faces):
         msg = "Cannot build a shell from 0 face"
         logger.error(msg)
         raise aocutils.exceptions.BRepBuildingException(msg)
+
     builder = OCC.TopoDS.TopoDS_Builder()
     a_shell = OCC.TopoDS.TopoDS_Shell()
     builder.MakeShell(a_shell)
