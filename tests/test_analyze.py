@@ -71,7 +71,7 @@ def test_minimum_distance():
 def test_face():
     import aocutils.brep.face
     # box face is planar
-    face = aocutils.brep.face.Face(aocutils.topology.Topo(box, return_iter=False).faces()[0])
+    face = aocutils.brep.face.Face(aocutils.topology.Topo(box, return_iter=False).faces[0])
     assert face.is_plane is True
     assert face.gaussian_curvature(0.1, 0.1) == 0.0
     assert face.mean_curvature(0.1, 0.1) == 0.0
@@ -79,7 +79,7 @@ def test_face():
     assert face.max_curvature(0.1, 0.1) == 0.0
 
     # sphere face is not planar
-    face = aocutils.brep.face.Face(aocutils.topology.Topo(sphere, return_iter=False).faces()[0])
+    face = aocutils.brep.face.Face(aocutils.topology.Topo(sphere, return_iter=False).faces[0])
     assert face.is_plane is False
     assert face.orientation == OCC.TopAbs.TopAbs_FORWARD
     assert -1 / 10. - tol < face.mean_curvature(0.1, 0.1) <= -1 / 10. + tol  # todo : how is curvature sign determined
@@ -92,7 +92,7 @@ def test_global_properties():
     box_properties = aocutils.analyze.global_.GlobalProperties(box)
     assert box_properties.volume() == 10 * 20 * 30
 
-    box_shell = aocutils.topology.Topo(box, return_iter=False).shells()[0]
+    box_shell = aocutils.topology.Topo(box, return_iter=False).shells[0]
     shell_properties = aocutils.analyze.global_.GlobalProperties(box_shell)
     assert 2200 - tol <= shell_properties.area() <= 2200 + tol
 
@@ -141,10 +141,10 @@ def test_inclusion():
         aocutils.analyze.inclusion.point_in_solid(edge, OCC.gp.gp_Pnt(10, 0, 0))
 
     with pytest.raises(aocutils.exceptions.WrongTopologicalType):
-        aocutils.analyze.inclusion.point_in_solid(aocutils.topology.Topo(sphere, return_iter=False).faces()[0],
+        aocutils.analyze.inclusion.point_in_solid(aocutils.topology.Topo(sphere, return_iter=False).faces[0],
                                                   OCC.gp.gp_Pnt(10, 0, 0))
 
-    sphere_shell = aocutils.topology.Topo(sphere, return_iter=False).shells()[0]
+    sphere_shell = aocutils.topology.Topo(sphere, return_iter=False).shells[0]
     assert aocutils.analyze.inclusion.point_in_boundingbox(sphere_shell, OCC.gp.gp_Pnt(9, 9, 9)) == True
     assert aocutils.analyze.inclusion.point_in_solid(sphere_shell, OCC.gp.gp_Pnt(9, 0, 0)) == True
     assert aocutils.analyze.inclusion.point_in_solid(sphere_shell, OCC.gp.gp_Pnt(9, 9, 9)) == False

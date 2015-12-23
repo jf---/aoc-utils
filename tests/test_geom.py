@@ -24,7 +24,7 @@ def box_shape():
 
 def test_curve(box_shape):
     t = aocutils.topology.Topo(box_shape)
-    wire = t.wires().__next__() if PY3 else t.wires().next()
+    wire = t.wires.__next__() if PY3 else t.wires.next()
 
     curve = aocutils.brep.wire.Wire(wire).to_curve()
     assert isinstance(curve, OCC.Geom.Geom_BSplineCurve)

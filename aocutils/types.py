@@ -19,6 +19,24 @@ logger = logging.getLogger(__name__)
 
 PY3 = not (int(sys.version.split('.')[0]) <= 2)
 
+# dictionary used to "cast" a shape to the subclass corresponding to its type
+topo_factory = {OCC.TopAbs.TopAbs_VERTEX: OCC.TopoDS.topods.Vertex,  OCC.TopAbs.TopAbs_EDGE: OCC.TopoDS.topods.Edge,
+                OCC.TopAbs.TopAbs_FACE: OCC.TopoDS.topods.Face, OCC.TopAbs.TopAbs_WIRE: OCC.TopoDS.topods.Wire,
+                OCC.TopAbs.TopAbs_SHELL: OCC.TopoDS.topods.Shell, OCC.TopAbs.TopAbs_SOLID: OCC.TopoDS.topods.Solid,
+                OCC.TopAbs.TopAbs_COMPOUND: OCC.TopoDS.topods.Compound,
+                OCC.TopAbs.TopAbs_COMPSOLID: OCC.TopoDS.topods.CompSolid}
+
+
+# key: shape type; value: TopoDS_* subclass
+topo_type_class = {OCC.TopAbs.TopAbs_VERTEX: OCC.TopoDS.TopoDS_Vertex,
+                   OCC.TopAbs.TopAbs_EDGE: OCC.TopoDS.TopoDS_Edge,
+                   OCC.TopAbs.TopAbs_FACE: OCC.TopoDS.TopoDS_Face,
+                   OCC.TopAbs.TopAbs_WIRE: OCC.TopoDS.TopoDS_Wire,
+                   OCC.TopAbs.TopAbs_SHELL: OCC.TopoDS.TopoDS_Shell,
+                   OCC.TopAbs.TopAbs_SOLID: OCC.TopoDS.TopoDS_Solid,
+                   OCC.TopAbs.TopAbs_COMPOUND: OCC.TopoDS.TopoDS_Compound,
+                   OCC.TopAbs.TopAbs_COMPSOLID: OCC.TopoDS.TopoDS_CompSolid}
+
 
 curve_types_dict = {OCC.GeomAbs.GeomAbs_Line: "line", OCC.GeomAbs.GeomAbs_Circle: "circle",
                     OCC.GeomAbs.GeomAbs_Ellipse: "ellipse", OCC.GeomAbs.GeomAbs_Hyperbola: "hyperbola",

@@ -577,7 +577,7 @@ class Face(aocutils.brep.base.BaseObject):
 
         """
         return [aocutils.brep.edge.Edge(i)
-                for i in aocutils.topology.WireExplorer(next(self.topo.wires())).ordered_edges()]
+                for i in aocutils.topology.WireExplorer(next(self.topo.wires)).ordered_edges]
 
     def local_props(self, u, v):
         r"""Curvature at the u parameter

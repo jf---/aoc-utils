@@ -44,7 +44,7 @@ sphere_radius = 10
 
 @pytest.fixture()
 def sphere_shape():
-    r"""Sphere shape for testing as a pytext fixture"""
+    r"""Sphere shape for testing as a pytest fixture"""
     return OCC.BRepPrimAPI.BRepPrimAPI_MakeSphere(sphere_radius).Shape()
 
 
@@ -71,7 +71,7 @@ def test_edge_line(box_shape):
     topo = aocutils.topology.Topo(box_shape)
 
     # take the first edge, it's a TopoDS_Edge
-    edge_0 = topo.edges().__next__() if PY3 else topo.edges().next()
+    edge_0 = topo.edges.__next__() if PY3 else topo.edges.next()
     assert not edge_0.IsNull()
 
     # create an aocutils Edge
@@ -126,7 +126,7 @@ def test_edge_sphere(sphere_shape):
     topo = aocutils.topology.Topo(sphere_shape, return_iter=False)
 
     # take the first edge, it's a TopoDS_Edge
-    edge_1 = topo.edges()[1]
+    edge_1 = topo.edges[1]
     assert not edge_1.IsNull()
 
     # create an aocutils Edge
@@ -186,7 +186,7 @@ def test_face_flat(box_shape):
     t = aocutils.topology.Topo(box_shape)  # wrap the box in a Topo object
 
     # take the first face, it is a TopoDS_Face
-    face_0 = t.faces().__next__() if PY3 else t.faces().next()
+    face_0 = t.faces.__next__() if PY3 else t.faces.next()
     assert not face_0.IsNull()
 
     # create an aocutils Face
@@ -269,7 +269,7 @@ def test_wire(box_shape):
     t = aocutils.topology.Topo(box_shape)
 
     # take the first wire
-    wire = t.wires().__next__() if PY3 else t.wires().next()
+    wire = t.wires.__next__() if PY3 else t.wires.next()
 
     # create the aocutils Wire
     my_wire = aocutils.brep.wire.Wire(wire)
@@ -300,7 +300,7 @@ def test_vertex(box_shape):
     assert my_vertex.y == 2.
     assert my_vertex.z == -2.6
 
-    vertices = aocutils.topology.Topo(box_shape).vertices()
+    vertices = aocutils.topology.Topo(box_shape).vertices
     for vert in vertices:
         assert isinstance(aocutils.brep.vertex.Vertex.to_pnt(vert), OCC.gp.gp_Pnt)
 
