@@ -17,7 +17,7 @@ more analyze tests (cf. waterline)
 
 meshing
 -------
-add a meshed (+ factor used) property to the base object not to mesh multiple times
+******** add a meshed (+ factor used) property to the base object not to mesh multiple times
 
 examples
 --------
@@ -42,8 +42,3 @@ curvature, radius etc ... RuntimeError
 _fixme/triangulation.py
 -----------------------
 Unexpected results :  3 vertexes, 1 edge, 0 triangle from a face ?
-
-Future improvements
--------------------
-display with topology info (nb vertices, nb edges ....)
-  How to find a reference to the panel to display labels with absolute positioning

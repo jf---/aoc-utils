@@ -24,6 +24,7 @@ import aocutils.analyze.distance
 import aocutils.display.display
 import aocutils.brep.vertex_make
 import aocutils.tolerance
+import aocutils.mesh
 
 logger = logging.getLogger(__name__)
 
@@ -40,10 +41,54 @@ class BaseObject(object):
         self._wrapped_instance = wrapped_instance
         self.name = name
         self.tolerance = tolerance
+        self._is_meshed = False
+        self._mesh_factor = None
 
     @property
     def wrapped_instance(self):
+        r"""The instance wrapped by the BaseObject"""
         return self._wrapped_instance
+
+    @property
+    def is_meshed(self):
+        r"""Flag for meshing status
+
+        Returns
+        -------
+        bool
+            True if the wrapped instance has been meshed, False otherwise
+
+        """
+        return self._is_meshed
+
+    @property
+    def mesh_factor(self):
+        r"""Mesh factor used
+
+        Returns
+        -------
+        float or None
+            last division factor used for meshing if is_meshed is True, None if is_meshed is False
+
+        """
+        return self._mesh_factor
+
+    def mesh(self, factor=4000.):
+        r"""Mesh the wrapped instance
+
+        Parameters
+        ----------
+        factor : float
+            Division factor of the bounding box max dimension
+
+        """
+        if self.is_meshed is False or self.mesh_factor != factor:
+            logger.info("Meshing with factor %s" % str(factor))
+            aocutils.mesh.mesh(self._wrapped_instance, factor=factor)
+            self._is_meshed = True
+            self._mesh_factor = factor
+        else:
+            logger.info("Already meshed !")
 
     @property
     def tshape(self):
