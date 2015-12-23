@@ -68,6 +68,9 @@ def n_sided_patch():
     display.DisplayShape(edges)
     display.DisplayShape(verts)
     display.DisplayShape(f1, color=aocutils.display.defaults.fp_dark_blue, update=True)
+    print(display.Viewer.__class__)  # OCC.V3d.Handle_V3d_Viewer
+    display.View.SetBackgroundColor(aocutils.display.defaults.gray)
+
 
 if __name__ == '__main__':
     n_sided_patch()

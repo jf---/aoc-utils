@@ -7,6 +7,9 @@ import functools
 
 import OCC.Display.SimpleGui
 
+import aocutils.display.defaults
+import aocutils.topology
+
 
 def show(shape, backend=None):
     r"""Quick and dirty shape display, mostly aimed at quickly looking at a shape during the development workflow

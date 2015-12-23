@@ -31,7 +31,7 @@ display
 ******** default backend in a python file and use this instead of hardcoding wx all over the place
 ******** This is similar to the tolerance.py file
 
-display with topology info (nb vertices, nb edges ....)
+
 
 _fixme/triangulation.py
 -----------------------
@@ -46,3 +46,9 @@ call the BRepCheck methods for every type + test
 brep/edge.py
 ------------
 curvature, radius etc ... RuntimeError
+
+
+Future improvements
+-------------------
+display with topology info (nb vertices, nb edges ....)
+  How to find a reference to the panel to display labels with absolute positioning
