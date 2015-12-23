@@ -1,17 +1,6 @@
 # coding: utf-8
 
-r"""types.py module of occutils
-
-Classes
--------
-BidirDict
-
-Functions
----------
-what_is_face()
-shape_is_cylinder()
-
-"""
+r"""types.py module of aocutils"""
 
 import sys
 import logging
@@ -98,12 +87,17 @@ brep_check_dict = {OCC.BRepCheck.BRepCheck_NoError: "NoError",
 
 
 class BidirDict(dict):
-    """Bi-directional lookup of Enums'...
+    """Bi-directional dictionnary
 
     Parameters
     ----------
-    li_in
-    li_out
+    iterable
+    kwargs
+
+    Raises
+    ------
+    KeyError if a duplicate value exists (as values must also be able to behave as keys)
+
     """
     def __init__(self, iterable=(), **kwargs):
         self.update(iterable, **kwargs)
@@ -139,57 +133,65 @@ orient_lut = BidirDict(orient_dict)
 topo_lut = BidirDict(topo_types_dict)
 geom_lut = BidirDict(geom_types_dict)
 
-classes = dir()
-geom_classes = []
-for elem in classes:
-    if elem.startswith('Geom') and 'swig' not in elem:
-        geom_classes.append(elem)
+# classes = dir()
+# geom_classes = list()
+# for elem in classes:
+#     if elem.startswith('Geom') and 'swig' not in elem:
+#         geom_classes.append(elem)
 
 
-def what_is_face(face):
-    """Returns all class names for which this class can be downcasted
+# def what_is_face(face):
+#     """Returns all class names for which this class can be downcasted
+#
+#     Parameters
+#     ----------
+#     face : OCC.TopoDS_Shape of type OCC.TopAbs.TopAbs_FACE
+#
+#     Returns
+#     -------
+#     list
+#
+#     """
+#     if not face.ShapeType() == OCC.TopAbs.TopAbs_FACE:
+#         msg = '%s type is not TopAbs_FACE. Conversion impossible' % str(face)
+#         logger.error(msg)
+#         raise aocutils.exceptions.WrongTopologicalType(msg)
+#
+#     # BRep_Tool.Surface() signatures
+#     # ------------------------------
+#     # static const Handle< Geom_Surface > & 	Surface (const TopoDS_Face &F, TopLoc_Location &L)
+#     #         static Handle< Geom_Surface > 	Surface (const TopoDS_Face &F)
+#     handle_geom_surface = OCC.BRep.BRep_Tool_Surface(face)
+#     geom_surface = handle_geom_surface.GetObject()
+#
+#     result = list()
+#
+#     for elem in classes:
+#         if elem.startswith('Geom') and 'swig' not in elem:
+#             geom_classes.append(elem)
+#
+#     for geom_class in geom_classes:
+#         if geom_surface.IsKind(geom_class) and geom_class not in result:
+#             result.append(geom_class)
+#     return result
 
-    Parameters
-    ----------
-    face
 
-    Returns
-    -------
-
-    """
-    if not face.ShapeType() == OCC.TopAbs.TopAbs_FACE:
-        msg = '%s is not a TopAbs_FACE. Conversion impossible' % str(face)
-        logger.error(msg)
-        raise aocutils.exceptions.WrongTopologicalType(msg)
-    hs = OCC.BRep.BRep_Tool_Surface(face)
-    obj = hs.GetObject()
-    result = []
-    for elem in classes:
-        if elem.startswith('Geom') and 'swig' not in elem:
-            geom_classes.append(elem)
-    # Run the test for each class
-    for geom_class in geom_classes:
-        if obj.IsKind(geom_class) and geom_class not in result:
-            result.append(geom_class)
-    return result
-
-
-def shape_is_cylinder(face):
-    r"""
-
-    Parameters
-    ----------
-    face : OCC.TopoDS.TopoDS_Face
-
-    Returns
-    -------
-    bool
-        True is the TopoDS_Shape is a cylinder, False otherwise
-
-    """
-    hs = OCC.BRep.BRep_Tool_Surface(face)
-    downcast_result = OCC.Geom.Handle_Geom_CylindricalSurface().DownCast(hs)
-    if downcast_result.IsNull():
-        return False
-    else:
-        return True
+# def shape_is_cylinder(face):
+#     r"""
+#
+#     Parameters
+#     ----------
+#     face : OCC.TopoDS.TopoDS_Face
+#
+#     Returns
+#     -------
+#     bool
+#         True is the TopoDS_Shape is a cylinder, False otherwise
+#
+#     """
+#     hs = OCC.BRep.BRep_Tool_Surface(face)
+#     downcast_result = OCC.Geom.Handle_Geom_CylindricalSurface().DownCast(hs)
+#     if downcast_result.IsNull():
+#         return False
+#     else:
+#         return True

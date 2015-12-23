@@ -321,7 +321,7 @@ def test_shell(box_shape):
     assert my_shell.tolerance == 1e-06
 
 
-def test_solid():
+def test_solid(box_shape):
     r"""aocutils Solid test
 
     Parameters

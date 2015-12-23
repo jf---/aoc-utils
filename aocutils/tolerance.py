@@ -5,7 +5,7 @@ r"""tolerance.py
 
 Summary
 -------
-Tolerance definitions for the whole occutils package
+Tolerance definitions for the whole aocutils package
 
 """
 
