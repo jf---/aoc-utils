@@ -14,6 +14,7 @@ import OCC.TopTools
 
 import aocutils.common
 import aocutils.topology
+import aocutils.tolerance
 
 
 def vertices_faces_from_shape(shape, deflection=0.1):
@@ -31,12 +32,12 @@ def vertices_faces_from_shape(shape, deflection=0.1):
     indexed_data_map_of_shape_list_of_shape.Add(shape, list_of_shape)
 
     bbox = OCC.Bnd.Bnd_Box()
-    bbox.SetGap(1e-6)
+    bbox.SetGap(aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE)
     OCC.BRepBndLib.brepbndlib_Add(shape, bbox)
 
     # These arguments are *SO* random...
     fd = OCC.BRepMesh.BRepMesh_FastDiscret(0.1, 0.1, bbox, False, False, False, False)
-    for f in aocutils.topology.Topo(shape).faces():
+    for f in aocutils.topology.Topo(shape).faces:
         fd.Add(f, indexed_data_map_of_shape_list_of_shape)
     n_vert, n_edge, n_face = fd.NbVertices(), fd.NbEdges(), fd.NbTriangles()
     print('number of mesh vertices, edges, triangles representing the BREP:', n_vert, n_edge, n_face)

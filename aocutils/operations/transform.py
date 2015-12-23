@@ -41,14 +41,38 @@ def translate(brep_or_iterable, vec, copy=False):
 
     """
     # st = occutils.types_lut.ShapeToTopology()
-    trns = OCC.gp.gp_Trsf()
-    trns.SetTranslation(vec)
+    gp_trsf = OCC.gp.gp_Trsf()
+    gp_trsf.SetTranslation(vec)
     if issubclass(brep_or_iterable.__class__, OCC.TopoDS.TopoDS_Shape):
-        brep_trns = OCC.BRepBuilderAPI.BRepBuilderAPI_Transform(brep_or_iterable, trns, copy)
-        brep_trns.Build()
-        return aocutils.topology.shape_to_topology(brep_trns.Shape())
+        brep_transform = OCC.BRepBuilderAPI.BRepBuilderAPI_Transform(brep_or_iterable, gp_trsf, copy)
+        brep_transform.Build()
+        return aocutils.topology.shape_to_topology(brep_transform.Shape())
     else:
         return [translate(brep_or_iterable, vec, copy) for _ in brep_or_iterable]
+
+
+def rotate(brep, axe, degree, copy=False):
+    r"""Rotate around an axis
+
+    Parameters
+    ----------
+    brep : OCC.TopoDS.TopoDS_*
+    axe : OCC.gp.gp_Ax1
+    degree : float
+        Rotation angle
+    copy : bool
+
+    Returns
+    -------
+    OCC.TopoDS.TopoDS_*
+
+    """
+    gp_trsf = OCC.gp.gp_Trsf()
+    gp_trsf.SetRotation(axe, math.radians(degree))
+    brep_transform = OCC.BRepBuilderAPI.BRepBuilderAPI_Transform(brep, gp_trsf, copy)
+    with aocutils.common.AssertIsDone(brep_transform, 'could not produce rotation'):
+        brep_transform.Build()
+        return aocutils.topology.shape_to_topology(brep_transform.Shape())
 
 
 def scale_uniform(brep, pnt, factor, copy=False):
@@ -120,27 +144,3 @@ def mirror_axe2(brep, axe2, copy=False):
     with aocutils.common.AssertIsDone(brep_trns, 'could not produce mirror'):
         brep_trns.Build()
         return brep_trns.Shape()
-
-
-def rotate(brep, axe, degree, copy=False):
-    r"""Rotate around an axis
-
-    Parameters
-    ----------
-    brep : OCC.TopoDS.TopoDS_*
-    axe : OCC.gp.gp_Ax1
-    degree : float
-        Rotation angle
-    copy : bool
-
-    Returns
-    -------
-    OCC.TopoDS.TopoDS_*
-
-    """
-    trns = OCC.gp.gp_Trsf()
-    trns.SetRotation(axe, math.radians(degree))
-    brep_trns = OCC.BRepBuilderAPI.BRepBuilderAPI_Transform(brep, trns, copy)
-    with aocutils.common.AssertIsDone(brep_trns, 'could not produce rotation'):
-        brep_trns.Build()
-        return aocutils.topology.shape_to_topology(brep_trns.Shape())

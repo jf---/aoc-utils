@@ -1,73 +1,6 @@
 # coding: utf-8
 
-r"""edge module of occutils
-
-Classes
--------
-    Edge
-        check()
-        is_closed()
-        is_periodic()
-        is_rational()
-        continuity()
-        degree()
-        nb_knots()
-        np_poles()
-        curve
-        curve_handle
-        adaptor
-        adaptor_handle
-        geom_curve_handle
-        geom_type
-        pcurve()
-        _local_properties
-        domain
-
-        -- Curve.GlobalProperties --
-        length()
-
-        -- Curve.modify --
-        trim()
-        extend_by_point()
-
-        -- Curve. ? --
-        closest()
-        project_vertex()
-        distance_on_curve()
-        mid_point()
-        divide_by_number_of_points()
-        __eq__()
-        __ne__()
-        first_vertex()
-        last_vertex()
-        common_vertex()
-        as_vec()
-
-        -- Curve. ? --
-        parameter_to_point()
-        fix_continuity()
-        continuity_from_faces()
-
-        -- Curve. ? --
-        is_line()
-        is_seam()
-        is_edge_on_face()
-
-        -- Curve.graphic --
-        show()
-
-        intersect()
-
-        brep_local_props
-        radius()
-        curvature()
-        tangent()
-        normal()
-        derivative()
-        points_from_tangential_deflection()
-
-        make_offset()
-
+r"""edge module of aocutils
 """
 
 from __future__ import print_function
@@ -521,7 +454,8 @@ class Edge(aocutils.brep.base.BaseObject):
         with aocutils.common.AssertIsDone(abscissa_point, 'could not compute distance on curve'):
             return abscissa_point.Parameter()
 
-    def mid_point(self):
+    @property
+    def midpoint(self):
         r"""Mid point
 
         Returns
@@ -531,9 +465,20 @@ class Edge(aocutils.brep.base.BaseObject):
         OCC.gp.gp_Pnt
             gp_Pnt corresponding to the parameter
         """
+        return self.adaptor.Value(self.midpoint_parameter)
+
+    @property
+    def midpoint_parameter(self):
+        r"""Value of the parameter at the edge midpoint
+
+        Returns
+        -------
+        float
+
+        """
         _min, _max = self.domain
-        _mid = (_min + _max) / 2.
-        return _mid, self.adaptor.Value(_mid)
+        return (_min + _max) / 2.
+
 
     def divide_by_number_of_points(self, n_pts, lbound=None, ubound=None):
         r"""Nested list of parameters and points on the edge at the requested interval [(param, gp_Pnt),...]

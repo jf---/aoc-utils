@@ -4,11 +4,12 @@
 r"""Display related utility functions"""
 
 import functools
+import logging
 
 import OCC.Display.SimpleGui
+import OCC.AIS
 
-import aocutils.display.defaults
-import aocutils.topology
+logger = logging.getLogger(__name__)
 
 
 def show(shape, backend=None):

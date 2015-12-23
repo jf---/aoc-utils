@@ -23,6 +23,7 @@ def sew_shapes(shapes, tolerance=1e-3):
 
     Returns
     -------
+    OCC.TopoDS.TopoDS_*
 
     """
     sew = OCC.BRepBuilderAPI.BRepBuilderAPI_Sewing(tolerance)

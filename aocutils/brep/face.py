@@ -1,59 +1,6 @@
 # coding: utf-8
 
 r"""face.py module of occutils
-
-Functions
----------
-face()
-
-Classes
--------
-
-    Face
-        check()
-        is_u_periodic()
-        is_v_periodic()
-        is_u_closed()
-        is_v_closed()
-        is_u_rational()
-        is_v_rational()
-        u_degree()
-        v_degree()
-        u_continuity()
-        v_continuity()
-        domain()
-        mid_point()
-        topo
-        surface
-        surface_handle
-        adaptor
-        adaptor_handle
-        is_closed()
-        is_planar()
-        is_trimmed()
-        on_trimmed()
-        parameter_to_point()
-        point_to_parameter()
-        continuity_edge_face()
-        project_vertex()
-        project_curve()
-        project_edge()
-        iso_curve()
-        edges()
-
-        local_props()
-        gaussian_curvature()
-        min_curvature()
-        mean_curvature()
-        max_curvature()
-        normal()
-        tangent()
-        radius()
-
-
-        __repr__
-        __str__
-
 """
 
 import logging

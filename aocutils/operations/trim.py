@@ -9,9 +9,10 @@ import logging
 
 import OCC.Geom
 
-import aocutils.convert.adapt
-import aocutils.operations.project
 import aocutils.brep.edge_make
+import aocutils.brep.wire
+import aocutils.operations.project
+
 
 logger = logging.getLogger(__name__)
 
@@ -32,8 +33,9 @@ def trim_wire(wire, shape_limit_1, shape_limit_2, periodic=False):
         the trimmed wire that lies between `shapeLimit1` and `shapeLimit2`
 
     """
-    adap = aocutils.convert.adapt.to_adaptor_3d(wire)
+    adap = aocutils.brep.wire.Wire(wire).to_adaptor_3d()
     bspl = adap.BSpline()
+
     if periodic:
         spl = bspl.GetObject()
         if spl.IsClosed():
@@ -42,6 +44,7 @@ def trim_wire(wire, shape_limit_1, shape_limit_2, periodic=False):
             msg = "the wire to be trimmed is not closed, hence cannot be made periodic"
             logger.warn(msg)
             warnings.warn(msg)
+
     p1 = aocutils.operations.project.point_on_curve(bspl, shape_limit_1)[0]
     p2 = aocutils.operations.project.point_on_curve(bspl, shape_limit_2)[0]
     a, b = sorted([p1, p2])

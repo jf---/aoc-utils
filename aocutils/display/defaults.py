@@ -19,13 +19,4 @@ if backend not in aocutils.display.backends.available_backends():
     logger.error(msg)
     raise ValueError(msg)
 
-blue = aocutils.display.color.color(0, 0, 1)
-white = aocutils.display.color.color(1, 1, 1)
-black = aocutils.display.color.color(0, 0, 0)
-gray = aocutils.display.color.color(0.5, 0.5, 0.5)
 
-fp_dark_blue = aocutils.display.color.color(34 / 255, 45 / 255, 90 / 255)
-fp_intermediate_blue = aocutils.display.color.color(61 / 255, 79 / 255, 153 / 255)
-fp_neon_blue = aocutils.display.color.color(0, 184 / 255, 1)
-fp_light_orange = aocutils.display.color.color(1, 136 / 255, 164 / 255)
-fp_dark_orange = aocutils.display.color.color(204 / 255, 63 / 255, 20 / 255)
