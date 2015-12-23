@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # coding: utf-8
 
-r"""
+r"""collections module
 
 Functions
 ---------
@@ -18,7 +18,7 @@ import OCC.TCollection
 
 
 def to_string(_string):
-    r"""
+    r"""str to OCC string conversion
 
     Parameters
     ----------
@@ -61,6 +61,8 @@ def tcol_dim_1(li, _type, start_at_one=False):
         The list that is used to populate the OCC collection
     _type : type
         The OCC collection geom_type
+    start_at_one : bool
+        Determines if the first index of the OCC collection will be 0 or 1
 
     Returns
     -------

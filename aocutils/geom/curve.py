@@ -85,10 +85,11 @@ class Curve(object):
 
         Parameters
         ----------
-        curve
+        curve : Geom_Curve
 
         Returns
         -------
+        OCC.GeomAdaptor.GeomAdaptor_Curve
 
         """
         return OCC.GeomAdaptor.GeomAdaptor_Curve(self._curve.GetHandle())

@@ -5,14 +5,8 @@ r"""memory.py
 
 Summary
 -------
+
 Memory measurement functions
-
-Functions
----------
-mem()
-rss()
-print_consumed_memory()
-
 
 """
 

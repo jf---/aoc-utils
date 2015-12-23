@@ -19,7 +19,9 @@ def mesh(shape, factor=4000.):
     Parameters
     ----------
     shape : OCC.TopoDS.TopoDS_Shape
+        Shape to mesh
     factor : float
+        The higher, the finer the mesh
 
     """
     bb = aocutils.analyze.bounds.BoundingBox(shape)
