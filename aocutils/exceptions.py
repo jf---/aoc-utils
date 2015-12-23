@@ -1,64 +1,69 @@
 #!/usr/bin/python
 # coding: utf-8
 
-r"""exceptions module for occutils"""
+r"""exceptions module for aocutils"""
 
 
-class OccUtilsException(Exception):
+class AocUtilsException(Exception):
     r"""Base exception"""
     pass
 
 
-class BooleanCutException(OccUtilsException):
-    r"""Something went wrong with a boolean cur"""
+class ParameterOutOfDomainException(AocUtilsException):
+    r"""A function was invoked with a parameter outside of the object parameter domain"""
     pass
 
 
-class OffsetShapeException(OccUtilsException):
+class BooleanCutException(AocUtilsException):
+    r"""Something went wrong with a boolean cut"""
+    pass
+
+
+class OffsetShapeException(AocUtilsException):
     r"""Something went wrong with an offset shape"""
     pass
 
 
-class FindPlaneException(OccUtilsException):
+class FindPlaneException(AocUtilsException):
     r"""Something went wrong with a find plane operation"""
     pass
 
 
-class InterpolationException(OccUtilsException):
+class InterpolationException(AocUtilsException):
     r"""Something went wrong with an interpolation"""
     pass
 
 
-class WrongTopologicalType(OccUtilsException):
+class WrongTopologicalType(AocUtilsException):
     r"""The topological geom_type is wrong"""
     pass
 
 
-class UniformAbscissaException(OccUtilsException):
+class UniformAbscissaException(AocUtilsException):
     r"""Uniform abscissa exception"""
     pass
 
 
-class CurveHandleException(OccUtilsException):
+class CurveHandleException(AocUtilsException):
     r"""Curve handle exception"""
     pass
 
 
-class SurfaceHandleException(OccUtilsException):
+class SurfaceHandleException(AocUtilsException):
     r"""Surface handle exception"""
     pass
 
 
-class TangentException(OccUtilsException):
+class TangentException(AocUtilsException):
     r"""Tangent exception"""
     pass
 
 
-class NoCommonVertexException(OccUtilsException):
+class NoCommonVertexException(AocUtilsException):
     r"""No common vertex exception"""
     pass
 
 
-class BRepBuildingException(OccUtilsException):
+class BRepBuildingException(AocUtilsException):
     r"""Something went wrong while building a BRep"""
     pass

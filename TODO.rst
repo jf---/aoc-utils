@@ -15,10 +15,6 @@ operations
 geom
 more analyze tests (cf. waterline)
 
-meshing
--------
-******** add a meshed (+ factor used) property to the base object not to mesh multiple times
-
 examples
 --------
 add example with handles ...
@@ -32,7 +28,7 @@ examples/geomplate.py
 
 brep
 ----
-u, v parameters checks against domain
+******** u, v parameters checks against domain
 call the BRepCheck methods for every type + test
 
 brep/edge.py

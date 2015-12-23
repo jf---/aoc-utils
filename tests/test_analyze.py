@@ -73,10 +73,17 @@ def test_face():
     # box face is planar
     face = aocutils.brep.face.Face(aocutils.topology.Topo(box, return_iter=False).faces[0])
     assert face.is_plane is True
-    assert face.gaussian_curvature(0.1, 0.1) == 0.0
-    assert face.mean_curvature(0.1, 0.1) == 0.0
-    assert face.min_curvature(0.1, 0.1) == 0.0
-    assert face.max_curvature(0.1, 0.1) == 0.0
+    u_mid = (face.domain[0] + face.domain[1]) / 2.
+    v_mid = (face.domain[2] + face.domain[3]) / 2.
+    assert face.gaussian_curvature(u_mid, v_mid) == 0.0
+    assert face.mean_curvature(u_mid, v_mid) == 0.0
+    assert face.min_curvature(u_mid, v_mid) == 0.0
+    assert face.max_curvature(u_mid, v_mid) == 0.0
+
+    with pytest.raises(aocutils.exceptions.ParameterOutOfDomainException):
+        face.gaussian_curvature(100, v_mid)
+    with pytest.raises(aocutils.exceptions.ParameterOutOfDomainException):
+        face.gaussian_curvature(u_mid, 100)
 
     # sphere face is not planar
     face = aocutils.brep.face.Face(aocutils.topology.Topo(sphere, return_iter=False).faces[0])

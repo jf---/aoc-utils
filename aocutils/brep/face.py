@@ -376,6 +376,22 @@ class Face(aocutils.brep.base.BaseObject):
         else:
             return False
 
+    def _check_u_in_domain(self, u):
+        if not self.domain[0] <= u <= self.domain[1]:
+            msg = "Parameter u is outside of domain ranging from %s to %s" % (str(self.domain[0]), str(self.domain[0]))
+            logger.error(msg)
+            raise aocutils.exceptions.ParameterOutOfDomainException(msg)
+        else:
+            pass
+
+    def _check_v_in_domain(self, v):
+        if not self.domain[2] <= v <= self.domain[3]:
+            msg = "Parameter v is outside of domain ranging from %s to %s" % (str(self.domain[2]), str(self.domain[3]))
+            logger.error(msg)
+            raise aocutils.exceptions.ParameterOutOfDomainException(msg)
+        else:
+            pass
+
     def parameter_to_point(self, u, v):
         r"""Coordinate at u,v
 
@@ -389,6 +405,8 @@ class Face(aocutils.brep.base.BaseObject):
         OCC.gp.gp_Pnt
 
         """
+        self._check_u_in_domain(u)
+        self._check_v_in_domain(v)
         return self.surface.Value(u, v)
 
     def point_to_parameter(self, pt):
@@ -511,6 +529,12 @@ class Face(aocutils.brep.base.BaseObject):
         OCC.Adaptor3d.Adaptor3d_IsoCurve
 
         """
+        if u_or_v == "u":
+            self._check_u_in_domain(param)
+        elif u_or_v == "v":
+            self._check_v_in_domain(param)
+        else:
+            self._check_v_in_domain(param)  # if u_or_v is not "u", it is assumed to be "v"
         uv = 0 if u_or_v == 'u' else 1
         return OCC.Adaptor3d.Adaptor3d_IsoCurve(self.adaptor_handle.GetHandle(), uv, param)
 
@@ -546,6 +570,8 @@ class Face(aocutils.brep.base.BaseObject):
         OCC.GeomLProp.GeomLProp_SLProps
 
         """
+        self._check_u_in_domain(u)
+        self._check_v_in_domain(v)
         _local_props = OCC.GeomLProp.GeomLProp_SLProps(self.surface_handle, u, v, 1, 1e-6)
 
         _domain = self.domain
@@ -585,6 +611,8 @@ class Face(aocutils.brep.base.BaseObject):
         float
 
         """
+        self._check_u_in_domain(u)
+        self._check_v_in_domain(v)
         return self.local_props(u, v).GaussianCurvature()
 
     def min_curvature(self, u, v):
@@ -615,6 +643,8 @@ class Face(aocutils.brep.base.BaseObject):
         float
 
         """
+        self._check_u_in_domain(u)
+        self._check_v_in_domain(v)
         return self.local_props(u, v).MeanCurvature()
 
     def max_curvature(self, u, v):
@@ -630,6 +660,8 @@ class Face(aocutils.brep.base.BaseObject):
         float
 
         """
+        self._check_u_in_domain(u)
+        self._check_v_in_domain(v)
         return self.local_props(u, v).MaxCurvature()
 
     def normal(self, u, v):
@@ -645,6 +677,8 @@ class Face(aocutils.brep.base.BaseObject):
         OCC.gp.gp_Vec
 
         """
+        self._check_u_in_domain(u)
+        self._check_v_in_domain(v)
         curv = self.local_props(u, v)
         if curv.IsNormalDefined():
             norm = curv.Normal()
@@ -670,6 +704,8 @@ class Face(aocutils.brep.base.BaseObject):
             U tangent, V tangent
 
         """
+        self._check_u_in_domain(u)
+        self._check_v_in_domain(v)
         du, dv = OCC.gp.gp_Dir(), OCC.gp.gp_Dir()
         curv = self.local_props(u, v)
         if curv.IsTangentUDefined() and curv.IsTangentVDefined():
@@ -693,6 +729,8 @@ class Face(aocutils.brep.base.BaseObject):
         float
 
         """
+        self._check_u_in_domain(u)
+        self._check_v_in_domain(v)
         # TODO: SHOULD WE RETURN A SIGNED RADIUS? ( get rid of abs() )?
         try:
             _crv_min = 1. / self.min_curvature(u, v)

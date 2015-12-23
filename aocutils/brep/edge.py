@@ -353,11 +353,14 @@ class Edge(aocutils.brep.base.BaseObject):
         """
         _min, _max = self.domain
         if _min < self.adaptor.FirstParameter():
-            raise ValueError('the lbound argument is lower than the first parameter of the curve: %s '
-                             % (self.adaptor.FirstParameter()))
+            msg = 'the lbound argument is < to the first parameter of the curve: %s' % self.adaptor.FirstParameter()
+            logger.error(msg)
+            raise aocutils.exceptions.ParameterOutOfDomainException(msg)
+
         if _max > self.adaptor.LastParameter():
-            raise ValueError('the ubound argument is greater than the last parameter of the curve: %s '
-                             % (self.adaptor.LastParameter()))
+            msg = 'the ubound argument is > to the last parameter of the curve: %s' % self.adaptor.LastParameter()
+            logger.error(msg)
+            raise aocutils.exceptions.ParameterOutOfDomainException(msg)
 
         lbound = _min if lbound is None else lbound
         ubound = _max if ubound is None else ubound
@@ -479,7 +482,6 @@ class Edge(aocutils.brep.base.BaseObject):
         _min, _max = self.domain
         return (_min + _max) / 2.
 
-
     def divide_by_number_of_points(self, n_pts, lbound=None, ubound=None):
         r"""Nested list of parameters and points on the edge at the requested interval [(param, gp_Pnt),...]
 
@@ -576,6 +578,14 @@ class Edge(aocutils.brep.base.BaseObject):
             logger.error(msg)
             raise ValueError(msg)
 
+    def _check_u_in_domain(self, u):
+        if not self.domain[0] <= u <= self.domain[1]:
+            msg = "Parameter is outside of domain ranging from %s to %s" % (str(self.domain[0]), str(self.domain[0]))
+            logger.error(msg)
+            raise aocutils.exceptions.ParameterOutOfDomainException(msg)
+        else:
+            pass
+
     def parameter_to_point(self, u):
         r"""returns the coordinate at parameter u
 
@@ -588,6 +598,7 @@ class Edge(aocutils.brep.base.BaseObject):
         OCC.gp.gp_Pnt
 
         """
+        self._check_u_in_domain(u)
         return self.adaptor.Value(u)
 
     def fix_continuity(self, continuity):
@@ -701,6 +712,7 @@ class Edge(aocutils.brep.base.BaseObject):
             If the curvature is not defined
 
         """
+        self._check_u_in_domain(u)
         # NOT SO SURE IF THIS IS THE SAME THING!!!
         self.brep_local_props.SetParameter(u)
         pnt = OCC.gp.gp_Pnt()
@@ -719,6 +731,7 @@ class Edge(aocutils.brep.base.BaseObject):
         float
 
         """
+        self._check_u_in_domain(u)
         self.brep_local_props.SetParameter(u)
         return self.brep_local_props.Curvature()
 
@@ -735,6 +748,7 @@ class Edge(aocutils.brep.base.BaseObject):
         OCC.gp.gp_Dir
 
         """
+        self._check_u_in_domain(u)
         self.brep_local_props.SetParameter(u)
         if self.brep_local_props.IsTangentDefined():
             ddd = OCC.gp.gp_Dir()
@@ -766,6 +780,7 @@ class Edge(aocutils.brep.base.BaseObject):
             If the normal is not defined
 
         """
+        self._check_u_in_domain(u)
         try:
             self.brep_local_props.SetParameter(u)
             a_dir = OCC.gp.gp_Dir()
@@ -787,6 +802,7 @@ class Edge(aocutils.brep.base.BaseObject):
         OCC.gp.gp_Vec
 
         """
+        self._check_u_in_domain(u)
         self.brep_local_props.SetParameter(u)
         deriv = {1: self.brep_local_props.D1(),
                  2: self.brep_local_props.D2(),
