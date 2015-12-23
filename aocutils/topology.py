@@ -4,6 +4,7 @@ r"""topology module of aocutils
 
 Summary
 -------
+
 Topological analysis of Shapes
 
 """

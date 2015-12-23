@@ -133,8 +133,7 @@ def points(list_of_points, start_tangent, end_tangent, filter_pts=True,
     if filter_pts:
         list_of_points = filter_points_by_distance(list_of_points)
 
-    fixed_points = aocutils.convert.collections.tcol_dim_1(list_of_points, OCC.TColgp.TColgp_HArray1OfPnt,
-                                                           start_at_one=True)
+    fixed_points = aocutils.collections.tcol_dim_1(list_of_points, OCC.TColgp.TColgp_HArray1OfPnt, start_at_one=True)
     try:
         interp = OCC.GeomAPI.GeomAPI_Interpolate(fixed_points.GetHandle(), False, tolerance)
         interp.Load(start_tangent, end_tangent, False)
@@ -171,12 +170,9 @@ def points_vectors(list_of_points, list_of_vectors, vector_mask=None,
     else:
         vector_mask = [True for _ in range(len(list_of_points))]
 
-    fixed_mask = aocutils.convert.collections.tcol_dim_1(vector_mask, OCC.TColStd.TColStd_HArray1OfBoolean,
-                                                         start_at_one=True)
-    fixed_points = aocutils.convert.collections.tcol_dim_1(list_of_points, OCC.TColgp.TColgp_HArray1OfPnt,
-                                                           start_at_one=True)
-    fixed_vectors = aocutils.convert.collections.tcol_dim_1(list_of_vectors, OCC.TColgp.TColgp_Array1OfVec,
-                                                            start_at_one=True)
+    fixed_mask = aocutils.collections.tcol_dim_1(vector_mask, OCC.TColStd.TColStd_HArray1OfBoolean, start_at_one=True)
+    fixed_points = aocutils.collections.tcol_dim_1(list_of_points, OCC.TColgp.TColgp_HArray1OfPnt, start_at_one=True)
+    fixed_vectors = aocutils.collections.tcol_dim_1(list_of_vectors, OCC.TColgp.TColgp_Array1OfVec, start_at_one=True)
 
     try:
         interp = OCC.GeomAPI.GeomAPI_Interpolate(fixed_points.GetHandle(), False, tolerance)
@@ -210,8 +206,7 @@ def points_no_tangency(list_of_points, filter_pts=True, closed=False,
     if filter_pts:
         list_of_points = filter_points_by_distance(list_of_points)
 
-    fixed_points = aocutils.convert.collections.tcol_dim_1(list_of_points, OCC.TColgp.TColgp_HArray1OfPnt,
-                                                           start_at_one=True)
+    fixed_points = aocutils.collections.tcol_dim_1(list_of_points, OCC.TColgp.TColgp_HArray1OfPnt, start_at_one=True)
     try:
         interp = OCC.GeomAPI.GeomAPI_Interpolate(fixed_points.GetHandle(), closed, tolerance)
         interp.Perform()

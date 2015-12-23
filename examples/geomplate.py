@@ -123,7 +123,7 @@ def geom_plate(event=None):
     p4 = OCC.gp.gp_Pnt(0, 0, 10)
     p5 = OCC.gp.gp_Pnt(5, 5, 5)
     poly = aocutils.brep.wire_make.closed_polygon([p1, p2, p3, p4])  # poly is a OCC.TopoDS.TopoDS_Wire
-    edges = [edge for edge in aocutils.topology.Topo(poly).edges()]  # list of OCC.TopoDS.TopoDS_Edge
+    edges = [edge for edge in aocutils.topology.Topo(poly).edges]  # list of OCC.TopoDS.TopoDS_Edge
 
     # C1 and C2 fail (C0 (default) works) - face is a OCC.TopoDS.TopoDS_Face
     face = aocutils.brep.face_make.n_sided(edges, [p5])
@@ -156,7 +156,7 @@ def build_plate(polygon, points):
 
     # add curve constraints
     for poly in polygon:
-        for edg in aocutils.topology.WireExplorer(poly).ordered_edges():
+        for edg in aocutils.topology.WireExplorer(poly).ordered_edges:
             c = OCC.BRepAdaptor.BRepAdaptor_HCurve()
             c.ChangeCurve().Initialize(edg)
             constraint = OCC.BRepFill.BRepFill_CurveConstraint(c.GetHandle(), 0)
@@ -350,7 +350,7 @@ def build_curve_network(event=None):
 
     print('Building geomplate...', end='')
     topo = aocutils.topology.Topo(iges_cpd)
-    edges_list = list(topo.edges())
+    edges_list = list(topo.edges)
     face = build_geom_plate(edges_list)
     print('done.')
     display.EraseAll()

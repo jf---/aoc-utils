@@ -34,9 +34,16 @@ class Curve(object):
 
     @classmethod
     def from_handle(cls, handle):
-        obj = cls()
-        obj._curve = handle.GetObject()
-        return obj
+        r"""Initialize from the handle
+
+        Parameters
+        ----------
+        handle
+
+        """
+        # obj = cls()
+        # obj._curve = handle.GetObject()
+        return cls(handle.GetObject())
 
     @property
     def handle(self):
