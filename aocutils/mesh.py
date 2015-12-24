@@ -15,9 +15,13 @@ BRepMesh_IncrementalMesh (const TopoDS_Shape &theShape, const Standard_Real theL
                           const Standard_Boolean isInParallel=Standard_False)
 """
 
+import logging
+
 import OCC.BRepMesh
 
 import aocutils.analyze.bounds
+
+logger = logging.getLogger(__name__)
 
 
 def mesh(shape, factor=4000., use_min_dim=False):
@@ -38,7 +42,11 @@ def mesh(shape, factor=4000., use_min_dim=False):
     """
     bb = aocutils.analyze.bounds.BoundingBox(shape)
     if use_min_dim:
-        OCC.BRepMesh.BRepMesh_IncrementalMesh(shape, bb.min_dimension / factor)
+        linear_deflection = bb.min_dimension / factor
+        logger.info("Linear deflection : %f" % linear_deflection)
+        OCC.BRepMesh.BRepMesh_IncrementalMesh(shape, linear_deflection)
     else:
-        OCC.BRepMesh.BRepMesh_IncrementalMesh(shape, bb.max_dimension / factor)
+        linear_deflection = bb.max_dimension / factor
+        logger.info("Linear deflection : %f" % linear_deflection)
+        OCC.BRepMesh.BRepMesh_IncrementalMesh(shape, linear_deflection)
     # return shape
