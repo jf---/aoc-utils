@@ -5,13 +5,13 @@ General
 -> CI
 -> Coverage
 
-Python 3 tests
-
 tests
 -----
-more tests for *_make.py
+*_make.py
 operations
 geom
+
+Python 3 tests
 
 examples
 --------
