@@ -12,13 +12,15 @@ logger = logging.getLogger(__name__)
 
 
 class Surface(object):
-    r"""
+    r"""Wrapper for a Geom_Surface
     """
     def __init__(self, surface):
         self._surface = surface
 
     @classmethod
     def from_handle(cls, handle):
+        r"""Create the Surface object from a surface handle"""
+        # TODO : check handle type
         obj = cls()
         obj._surface = handle.GetObject()
         return obj
@@ -36,7 +38,7 @@ class Surface(object):
 
     @classmethod
     def coons(cls, edges):
-        r"""Make coons
+        r"""Make coons -> Surface
 
         Parameters
         ----------
@@ -44,7 +46,7 @@ class Surface(object):
 
         Returns
         -------
-        Handle< Geom_BSplineSurface >
+        Surface
 
         """
         if len(edges) == 4:

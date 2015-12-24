@@ -3,28 +3,45 @@
 
 r"""Bounding box analysis
 
-Classes
--------
-BoundingBox
-
 """
+
+import logging
 
 import OCC.Bnd
 import OCC.BRepBndLib
 import OCC.gp
+import OCC.TopoDS
 
 import aocutils.geom.point
 import aocutils.tolerance
+import aocutils.exceptions
+import aocutils.brep.base
+import aocutils.mesh
+
+logger = logging.getLogger(__name__)
 
 
 class BoundingBox(object):
-    r"""Wrapper class for a bounding box"""
+    r"""Wrapper class for a bounding box
+
+    Notes
+    -----
+    Mesh the shape before instantiating a BoundingBox if required, infinite recursion would be created by calling
+    mesh.py's mesh() method
+
+    """
     def __init__(self, shape, tol=aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE):
-        self._shape = shape
+        if isinstance(shape, OCC.TopoDS.TopoDS_Shape) or issubclass(shape.__class__, OCC.TopoDS.TopoDS_Shape):
+            self._shape = shape
+        else:
+            msg = "Expecting a TopoDS_Shape (or a subclass), got a %s" % str(shape.__class__)
+            logger.error(msg)
+            raise aocutils.exceptions.WrongTopologicalType(msg)
+        # self._shape = shape
         self._tol = tol
         self._bbox = OCC.Bnd.Bnd_Box()
         self._bbox.SetGap(tol)
-        OCC.BRepBndLib.brepbndlib_Add(shape, self._bbox)
+        OCC.BRepBndLib.brepbndlib_Add(self._shape, self._bbox)
         self.x_min, self.y_min, self.z_min, self.x_max, self.y_max, self.z_max = self._bbox.Get()
 
     @property

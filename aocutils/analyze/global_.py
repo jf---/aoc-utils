@@ -65,6 +65,7 @@ class GlobalProperties(object):
             OCC.BRepGProp.brepgprop_VolumeProperties(self.shape, self._system)
         return self._system
 
+    @property
     def centre(self):
         r"""Centre of the entity
 
@@ -73,10 +74,12 @@ class GlobalProperties(object):
         """
         return self.system.CentreOfMass()
 
+    @property
     def inertia(self):
         """Inertia matrix"""
         return self.system.MatrixOfInertia(), self.system.MomentOfInertia()
 
+    @property
     def area(self):
         r"""Area of the surface"""
         if self.topo_type not in GlobalProperties.surfacic_types:
@@ -85,6 +88,7 @@ class GlobalProperties(object):
             raise aocutils.exceptions.WrongTopologicalType(msg)
         return self._mass()
 
+    @property
     def volume(self):
         r"""Volume"""
         if self.topo_type not in GlobalProperties.volumic_types:
@@ -96,6 +100,7 @@ class GlobalProperties(object):
     def _mass(self):
         return self.system.Mass()
 
+    @property
     def length(self):
         r"""length of a wire or edge"""
         if self.topo_type not in GlobalProperties.linear_types:

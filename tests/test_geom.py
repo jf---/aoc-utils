@@ -17,10 +17,12 @@ import aocutils.geom.curve
 
 PY3 = not (int(sys.version.split('.')[0]) <= 2)
 
+
 @pytest.fixture()
 def box_shape():
     r"""Box shape for testing"""
     return OCC.BRepPrimAPI.BRepPrimAPI_MakeBox(10, 20, 30).Shape()
+
 
 def test_curve(box_shape):
     t = aocutils.topology.Topo(box_shape)

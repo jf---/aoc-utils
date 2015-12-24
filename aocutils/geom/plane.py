@@ -23,6 +23,9 @@ logger = logging.getLogger(__name__)
 
 
 class Plane(object):
+    r"""Wrapper for Geom_Plane
+
+    """
     def __init__(self, geom_plane):
         self._geom_plane = geom_plane
 

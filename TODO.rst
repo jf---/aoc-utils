@@ -9,11 +9,9 @@ Python 3 tests
 
 tests
 -----
-doctests?
 more tests for *_make.py
 operations
 geom
-more analyze tests (cf. waterline)
 
 examples
 --------
@@ -25,10 +23,6 @@ examples/geomplate.py
 ---------------------
 - need examples where the tangency to constraining faces is respected
 - fix build_curve_network()
-
-brep/edge.py
-------------
-******** curvature, radius etc ... RuntimeError
 
 _fixme/triangulation.py
 -----------------------

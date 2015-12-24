@@ -4,6 +4,7 @@
 r"""analyze package tests"""
 
 import pytest
+import math
 
 import OCC.gp
 import OCC.TopAbs
@@ -23,34 +24,54 @@ import aocutils.analyze.distance
 import aocutils.analyze.global_
 import aocutils.analyze.inclusion
 
+box_dim_x = 10.
+box_dim_y = 20.
+box_dim_z = 30.
 
-box = aocutils.primitives.box(10, 20, 30)
-sphere = aocutils.primitives.sphere(10)
-sphere_2 = aocutils.primitives.sphere(OCC.gp.gp_Pnt(40, 0, 0), 10)
-edge = aocutils.brep.edge_make.line(OCC.gp.gp_Pnt(0, 0, 0), OCC.gp.gp_Pnt(20, 0, 0))
-edge_2 = aocutils.brep.edge_make.line(OCC.gp.gp_Pnt(20, 0, 0), OCC.gp.gp_Pnt(20, 20, 0))
-edge_3 = aocutils.brep.edge_make.line(OCC.gp.gp_Pnt(20, 20, 0), OCC.gp.gp_Pnt(0, 20, 0))
-edge_4 = aocutils.brep.edge_make.line(OCC.gp.gp_Pnt(0, 20, 0), OCC.gp.gp_Pnt(0, 0, 0))
+sphere_radius = 10.
+
+square_side_length = 20.
+
+
+box = aocutils.primitives.box(box_dim_x, box_dim_y, box_dim_z)
+sphere = aocutils.primitives.sphere(sphere_radius)
+sphere_2 = aocutils.primitives.sphere(OCC.gp.gp_Pnt(40, 0, 0), sphere_radius)
+
+# 4 edges making a square
+edge = aocutils.brep.edge_make.line(OCC.gp.gp_Pnt(0, 0, 0), OCC.gp.gp_Pnt(square_side_length, 0, 0))
+edge_2 = aocutils.brep.edge_make.line(OCC.gp.gp_Pnt(square_side_length, 0, 0), OCC.gp.gp_Pnt(square_side_length,
+                                                                                             square_side_length, 0))
+edge_3 = aocutils.brep.edge_make.line(OCC.gp.gp_Pnt(square_side_length, square_side_length, 0),
+                                      OCC.gp.gp_Pnt(0, square_side_length, 0))
+edge_4 = aocutils.brep.edge_make.line(OCC.gp.gp_Pnt(0, square_side_length, 0), OCC.gp.gp_Pnt(0, 0, 0))
+
+# an open wire
 wire = aocutils.brep.wire_make.wire([edge, edge_2])
+
+# a closed wire
 closed_wire = aocutils.brep.wire_make.wire([edge, edge_2, edge_3, edge_4])
+
+# a face from the closed wire
 face = aocutils.brep.face_make.face(closed_wire)
+
+# shortcut to default tolerance
 tol = aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE
 
 
 def test_bounds_box():
     # occutils.mesh.mesh(box)
     bb = aocutils.analyze.bounds.BoundingBox(box)
-    assert 10 <= bb.x_span < 10 + 2.001 * tol
-    assert 20 <= bb.y_span < 20 + 2.001 * tol
-    assert 30 <= bb.z_span < 30 + 2.001 * tol
+    assert box_dim_x <= bb.x_span < box_dim_x + 2.001 * tol
+    assert box_dim_y <= bb.y_span < box_dim_y + 2.001 * tol
+    assert box_dim_z <= bb.z_span < box_dim_z + 2.001 * tol
 
 
 def test_bounds_sphere():
-    # occutils.mesh.mesh(box)
+    # aocutils.mesh.mesh(box)
     bb = aocutils.analyze.bounds.BoundingBox(sphere)
-    assert 20 <= bb.x_span < 20 + 2.001 * tol
-    assert 20 <= bb.y_span < 20 + 2.001 * tol
-    assert 20 <= bb.z_span < 20 + 2.001 * tol
+    assert 2 * sphere_radius <= bb.x_span < 2 * sphere_radius + 2.001 * tol
+    assert 2 * sphere_radius <= bb.y_span < 2 * sphere_radius + 2.001 * tol
+    assert 2 * sphere_radius <= bb.z_span < 2 * sphere_radius + 2.001 * tol
 
 
 def test_bounds_sphere_boundingbox_middle():
@@ -68,91 +89,111 @@ def test_minimum_distance():
     assert type(md.point_pairs[0][0]) == OCC.gp.gp_Pnt
 
 
-def test_face():
-    import aocutils.brep.face
-    # box face is planar
-    face = aocutils.brep.face.Face(aocutils.topology.Topo(box, return_iter=False).faces[0])
-    assert face.is_plane is True
-    u_mid = (face.domain[0] + face.domain[1]) / 2.
-    v_mid = (face.domain[2] + face.domain[3]) / 2.
-    assert face.gaussian_curvature(u_mid, v_mid) == 0.0
-    assert face.mean_curvature(u_mid, v_mid) == 0.0
-    assert face.min_curvature(u_mid, v_mid) == 0.0
-    assert face.max_curvature(u_mid, v_mid) == 0.0
+def test_global_properties_box():
+    r"""Properties of a the box"""
 
-    with pytest.raises(aocutils.exceptions.ParameterOutOfDomainException):
-        face.gaussian_curvature(100, v_mid)
-    with pytest.raises(aocutils.exceptions.ParameterOutOfDomainException):
-        face.gaussian_curvature(u_mid, 100)
-
-    # sphere face is not planar
-    face = aocutils.brep.face.Face(aocutils.topology.Topo(sphere, return_iter=False).faces[0])
-    assert face.is_plane is False
-    assert face.orientation == OCC.TopAbs.TopAbs_FORWARD
-    assert -1 / 10. - tol < face.mean_curvature(0.1, 0.1) <= -1 / 10. + tol  # todo : how is curvature sign determined
-    assert -1 / 10. - tol < face.min_curvature(0.1, 0.1) <= -1 / 10. + tol
-    assert -1 / 10. - tol < face.max_curvature(0.1, 0.1) <= -1 / 10. + tol
-    assert 1 / 10.**2 - tol < face.gaussian_curvature(0.1, 0.1) <= 1 / 10.**2 + tol
-
-
-def test_global_properties():
+    # wrap the box in GlobalProperties
     box_properties = aocutils.analyze.global_.GlobalProperties(box)
-    assert box_properties.volume() == 10 * 20 * 30
 
+    # check the volume
+    assert box_properties.volume == box_dim_x * box_dim_y * box_dim_z
+
+    # check the length is not defined for the box
+    with pytest.raises(aocutils.exceptions.WrongTopologicalType):
+        box_properties.length
+
+    # check the area is not defined for the box ....
+    with pytest.raises(aocutils.exceptions.WrongTopologicalType):
+        box_properties.area
+
+    # .... but the area of the shell of the box is defined and exact
     box_shell = aocutils.topology.Topo(box, return_iter=False).shells[0]
     shell_properties = aocutils.analyze.global_.GlobalProperties(box_shell)
-    assert 2200 - tol <= shell_properties.area() <= 2200 + tol
+    theoretical_area = 2 * box_dim_x * box_dim_y + 2 * box_dim_y * box_dim_z + 2 * box_dim_x * box_dim_z
+    assert theoretical_area - tol <= shell_properties.area <= theoretical_area + tol
 
+    # but the length is not defined for a shell....
+    with pytest.raises(aocutils.exceptions.WrongTopologicalType):
+        shell_properties.length
+
+    # ... nor is the volume
+    with pytest.raises(aocutils.exceptions.WrongTopologicalType):
+        shell_properties.volume
+
+
+def test_global_properties_edge():
+    r"""Test the GlobalProperties of an edge"""
+    # wrap the box in GlobalProperties
     edge_properties = aocutils.analyze.global_.GlobalProperties(edge)
-    assert edge_properties.length() == 20
 
+    # check the length of the edge
+    assert edge_properties.length == square_side_length
+
+    # the volume of an edge is undefined !
     with pytest.raises(aocutils.exceptions.WrongTopologicalType):
-        edge_properties.volume()
+        edge_properties.volume
 
-    with pytest.raises(aocutils.exceptions.WrongTopologicalType):
-        box_properties.area()
-
-    with pytest.raises(aocutils.exceptions.WrongTopologicalType):
-        box_properties.length()
-
-    with pytest.raises(aocutils.exceptions.WrongTopologicalType):
-        shell_properties.length()
-
-    with pytest.raises(aocutils.exceptions.WrongTopologicalType):
-        shell_properties.volume()
-
-    edge_centre = edge_properties.centre()
+    # but the centre exists and is at the middle of a straight edge
+    edge_centre = edge_properties.centre
     assert type(edge_centre) == OCC.gp.gp_Pnt
-    assert edge_centre.X() == 10
+    assert edge_centre.X() == square_side_length / 2.
     assert edge_centre.Y() == 0
     assert edge_centre.Z() == 0
 
+
+def test_global_properties_sphere():
+    r"""Properties of a the sphere"""
+    # wrap the sphere in global properties
     sphere_properties = aocutils.analyze.global_.GlobalProperties(sphere)
-    sphere_centre = sphere_properties.centre()
+
+    # the centre should be very close to the origin
+    sphere_centre = sphere_properties.centre
     assert - tol < sphere_centre.X() < tol
     assert - tol < sphere_centre.Y() < tol
     assert - tol < sphere_centre.Z() < tol
 
+    # the volume should be close to 4/3*pi*r**3
+    assert sphere_properties.volume == 4. / 3. * math.pi * sphere_radius**3
+
+
+def test_global_properties_wire_open():
+    r"""Properties of the open wire"""
+
     wire_properties = aocutils.analyze.global_.GlobalProperties(wire)
-    assert wire_properties.length() == 40
+    assert wire_properties.length == square_side_length * 2.
+
+
+def test_global_properties_wire_closed():
+    r"""Properties of the closed wire"""
+
+    closed_wire_properties = aocutils.analyze.global_.GlobalProperties(closed_wire)
+    assert closed_wire_properties.length == square_side_length * 4.
 
 
 def test_inclusion():
-    assert aocutils.analyze.inclusion.point_in_boundingbox(sphere, OCC.gp.gp_Pnt(9, 9, 9)) == True
+    assert aocutils.analyze.inclusion.point_in_boundingbox(sphere, OCC.gp.gp_Pnt(sphere_radius - 1.,
+                                                                                 sphere_radius - 1.,
+                                                                                 sphere_radius - 1.)) == True
 
-    assert aocutils.analyze.inclusion.point_in_solid(sphere, OCC.gp.gp_Pnt(9, 0, 0)) == True
-    assert aocutils.analyze.inclusion.point_in_solid(sphere, OCC.gp.gp_Pnt(9, 9, 9)) == False
-    assert aocutils.analyze.inclusion.point_in_solid(sphere, OCC.gp.gp_Pnt(10, 0, 0)) == None
+    assert aocutils.analyze.inclusion.point_in_solid(sphere, OCC.gp.gp_Pnt(sphere_radius - 1., 0, 0)) == True
+    assert aocutils.analyze.inclusion.point_in_solid(sphere, OCC.gp.gp_Pnt(sphere_radius - 1.,
+                                                                           sphere_radius - 1.,
+                                                                           sphere_radius - 1.)) == False
+    assert aocutils.analyze.inclusion.point_in_solid(sphere, OCC.gp.gp_Pnt(sphere_radius, 0, 0)) == None
 
     with pytest.raises(aocutils.exceptions.WrongTopologicalType):
-        aocutils.analyze.inclusion.point_in_solid(edge, OCC.gp.gp_Pnt(10, 0, 0))
+        aocutils.analyze.inclusion.point_in_solid(edge, OCC.gp.gp_Pnt(sphere_radius, 0, 0))
 
     with pytest.raises(aocutils.exceptions.WrongTopologicalType):
         aocutils.analyze.inclusion.point_in_solid(aocutils.topology.Topo(sphere, return_iter=False).faces[0],
-                                                  OCC.gp.gp_Pnt(10, 0, 0))
+                                                  OCC.gp.gp_Pnt(sphere_radius, 0, 0))
 
     sphere_shell = aocutils.topology.Topo(sphere, return_iter=False).shells[0]
-    assert aocutils.analyze.inclusion.point_in_boundingbox(sphere_shell, OCC.gp.gp_Pnt(9, 9, 9)) == True
-    assert aocutils.analyze.inclusion.point_in_solid(sphere_shell, OCC.gp.gp_Pnt(9, 0, 0)) == True
-    assert aocutils.analyze.inclusion.point_in_solid(sphere_shell, OCC.gp.gp_Pnt(9, 9, 9)) == False
-    assert aocutils.analyze.inclusion.point_in_solid(sphere_shell, OCC.gp.gp_Pnt(10, 0, 0)) == None
+    assert aocutils.analyze.inclusion.point_in_boundingbox(sphere_shell, OCC.gp.gp_Pnt(sphere_radius - 1.,
+                                                                                       sphere_radius - 1.,
+                                                                                       sphere_radius - 1.)) == True
+    assert aocutils.analyze.inclusion.point_in_solid(sphere_shell, OCC.gp.gp_Pnt(sphere_radius - 1., 0, 0)) == True
+    assert aocutils.analyze.inclusion.point_in_solid(sphere_shell, OCC.gp.gp_Pnt(sphere_radius - 1.,
+                                                                                 sphere_radius - 1.,
+                                                                                 sphere_radius - 1.)) == False
+    assert aocutils.analyze.inclusion.point_in_solid(sphere_shell, OCC.gp.gp_Pnt(sphere_radius, 0, 0)) == None
