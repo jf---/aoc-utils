@@ -10,17 +10,27 @@ import operator
 
 import OCC.gp
 
+import aocutils.geom._three_d
 import aocutils.tolerance
 import aocutils.exceptions
 
 logger = logging.getLogger(__name__)
 
 
-class Point(object):
-    def __init__(self, x, y, z):
-        self._x = x
-        self._y = z
-        self._z = z
+class Point(aocutils.geom._three_d.ThreeD):
+    r"""3D point
+
+    Can be constructed from 3 parameters or from a tuple of length 3
+
+    Examples
+    --------
+    >>> p = Point.from_xyz(1, 2, 3)
+    >>> p.x
+    1
+    >>> p = Point.from_xyz(x=1, y=2, z=3)
+    >>> p.y
+    2
+    """
 
     @classmethod
     def from_gp_pnt(cls, gp_pnt):
@@ -34,15 +44,6 @@ class Point(object):
     def gp_pnt(self):
         return OCC.gp.gp_Pnt(self.X(), self.Y(), self.Z())
 
-    def X(self):
-        return self._x
-
-    def Y(self):
-        return self._y
-
-    def Z(self):
-        return self._z
-
     def translate(self, vector):
         r"""Translate a point with a vector
 
@@ -55,7 +56,7 @@ class Point(object):
         OCC.gp.gp_Pnt
 
         """
-        return Point(self.X() + vector.X(), self.Y() + vector.Y(), self.Z() + vector.Z())
+        return Point.from_xyz(self.X() + vector.X(), self.Y() + vector.Y(), self.Z() + vector.Z())
 
     @staticmethod
     def midpoint(pnt_a, pnt_b):
@@ -71,7 +72,16 @@ class Point(object):
         Point
 
         """
-        return Point((pnt_a.X() + pnt_b.X()) / 2., (pnt_a.Y() + pnt_b.Y()) / 2, (pnt_a.Z() + pnt_b.Z()) / 2)
+        return Point.from_xyz((pnt_a.X() + pnt_b.X()) / 2., (pnt_a.Y() + pnt_b.Y()) / 2, (pnt_a.Z() + pnt_b.Z()) / 2)
+
+    def middle(self, other):
+        r"""Middle of self and other
+
+        Parameters
+        ----------
+        other : Point
+        """
+        return Point.from_xyz((self.X() + other.X()) / 2., (self.Y() + other.Y()) / 2., (self.Z() + other.Z()) / 2.)
 
     def __eq__(self, other):
         r"""Is pnt equal to other?

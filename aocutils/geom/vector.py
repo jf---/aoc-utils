@@ -8,19 +8,38 @@ from __future__ import division
 
 import logging
 
+import numpy as np
 import OCC.gp
 
 import aocutils.tolerance
 import aocutils.exceptions
+import aocutils.geom._three_d
 
 logger = logging.getLogger(__name__)
 
 
-class Vector(object):
-    def __init__(self, x, y, z):
-        self._x = x
-        self._y = z
-        self._z = z
+class Vector(aocutils.geom._three_d.ThreeD):
+    r"""3D vector
+
+    Can be constructed from 3 parameters or from a tuple of length 3
+
+    Examples
+    --------
+    """
+    @classmethod
+    def from_points(cls, start, end):
+        r"""Create the vector from 2 points
+
+        Parameters
+        ----------
+        start : Point
+        end : Point
+        """
+        obj = cls()
+        obj._x = end.X() - start.X()
+        obj._y = end.Y() - start.Y()
+        obj._z = end.Z() - start.Z()
+        return obj
 
     @classmethod
     def from_gp_vec(cls, gp_vec):
@@ -34,17 +53,26 @@ class Vector(object):
     def gp_vec(self):
         return OCC.gp.gp_Vec(self.X(), self.Y(), self.Z())
 
-    def X(self):
-        return self._x
-
-    def Y(self):
-        return self._y
-
-    def Z(self):
-        return self._z
-
+    @property
     def norm(self):
-        return (self._x**2 + self._y**2 + self.z**2)**.5
+        return (self.X()**2 + self.Y()**2 + self.Z()**2)**.5
+
+    def to_array(self):
+        r"""Convert the vector to an array"""
+        return [self.X(), self.Y(), self.Z()]
+
+    def perpendicular(self, other):
+        r"""Vector perpendicular to self and other
+
+        Parameters
+        ----------
+        other : Vector
+            The other vector used to compute the perpendicular
+        """
+        if other.norm == 0 or self.norm == 0:
+            raise aocutils.exceptions.ZeroNormVectorException
+
+        return Vector.from_tuple(np.cross(self.to_array(), other.to_array()))
 
     def __add__(self, other):
         r"""Add a vector to self
@@ -58,7 +86,7 @@ class Vector(object):
         Vector
 
         """
-        return Vector(self.X() + other.X(), self.Y() + other.Y(), self.Z() + other.Z())
+        return Vector.from_xyz(self.X() + other.X(), self.Y() + other.Y(), self.Z() + other.Z())
 
     def __sub__(self, other):
         r"""Substract a vector to self
@@ -72,21 +100,21 @@ class Vector(object):
         Vector
 
         """
-        return Vector(self.X() - other.X(), self.Y() - other.Y(), self.Z() - other.Z())
+        return Vector.from_xyz(self.X() - other.X(), self.Y() - other.Y(), self.Z() - other.Z())
 
     def __mul__(self, scalar):
         r"""Multiply a vector by a scalar
 
         Parameters
         ----------
-        scalar : float
+        scalar_ : float
 
         Returns
         -------
         Vector
 
         """
-        return Vector(self.X() * scalar, self.Y() * scalar,  self.Z() * scalar)
+        return Vector.from_xyz(self.X() * scalar, self.Y() * scalar, self.Z() * scalar)
 
     def __div__(self, scalar):
         r"""Multiply a vector by a scalar
@@ -100,7 +128,7 @@ class Vector(object):
         Vector
 
         """
-        return Vector(self.X() / scalar, self.Y() / scalar,  self.Z() / scalar)
+        return Vector.from_xyz(self.X() / scalar, self.Y() / scalar,  self.Z() / scalar)
 
     def __eq__(self, other):
         r"""Is self equal to other?

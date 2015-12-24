@@ -9,6 +9,11 @@ class AocUtilsException(Exception):
     pass
 
 
+class ZeroNormVectorException(AocUtilsException):
+    """A vector has a norm of 0, which causes a problem"""
+    pass
+
+
 class UndefinedPropertyException(AocUtilsException):
     r"""A property is undefined (e.g.centre of curvature of a flat plate)"""
     pass
