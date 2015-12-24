@@ -100,6 +100,7 @@ def test_edge_line(box_shape):
     assert my_edge.geom_type == 'line'
     assert my_edge.curvature(domain_middle) == 0.
     assert my_edge.tangent(domain_middle) is not None
+    assert my_edge.curvature(domain_middle) == 0.
 
     # Check property types
     assert issubclass(my_edge.curve.__class__, OCC.Geom.Geom_Curve)
@@ -107,11 +108,12 @@ def test_edge_line(box_shape):
     assert isinstance(my_edge.derivative(domain_middle, 2), OCC.gp.gp_Vec)
     assert isinstance(my_edge.derivative(domain_middle, 3), OCC.gp.gp_Vec)
 
-    # TODO : RuntimeError in one case, ValueError in the other !
-    with pytest.raises(RuntimeError):
-        assert my_edge.radius(1.) is not None
-    with pytest.raises(ValueError):
-        assert my_edge.normal(1.) is not None
+    with pytest.raises(aocutils.exceptions.UndefinedPropertyException):
+        assert my_edge.radius(domain_middle).X()
+    with pytest.raises(aocutils.exceptions.ParameterOutOfDomainException):
+        my_edge.radius(domain_start - 10.)
+    with pytest.raises(aocutils.exceptions.ParameterOutOfDomainException):
+        my_edge.normal(domain_end + 10.)
 
 
 def test_edge_sphere(sphere_shape):
@@ -139,8 +141,8 @@ def test_edge_sphere(sphere_shape):
     assert my_edge.length() > 0.
     assert my_edge.domain[1] > my_edge.domain[0]
 
-    domain_start = my_edge.domain[0]
-    domain_end = my_edge.domain[1]
+    domain_start = my_edge.domain_start
+    domain_end = my_edge.domain_end
     domain_middle = (domain_start + domain_end) / 2.
 
     assert my_edge.is_valid is True
@@ -156,8 +158,9 @@ def test_edge_sphere(sphere_shape):
     assert my_edge.geom_curve_handle is not None
 
     # check the curvature is 1 / radius (r=10)
-    curvature = 1. / sphere_radius
-    assert curvature - 1e-6 <= my_edge.curvature(domain_middle) <= curvature + 1e6
+    assert my_edge.curvature(domain_middle) == 1. / sphere_radius
+    # curvature = 1. / sphere_radius
+    # assert curvature - 1e-6 <= my_edge.curvature(domain_middle) <= curvature + 1e6
 
     # Check that the computed centre of curvature is at the origin
     assert my_edge.radius(domain_middle).X() < my_edge.tolerance
@@ -211,8 +214,8 @@ def test_face_flat(box_shape):
     assert my_face.v_continuity == "GeomAbs_CN"
     domain = my_face.domain
     assert len(domain) == 4
-    assert domain[1] > domain[0]  # u max > u min
-    assert domain[3] > domain[2]  # v max > v min
+    assert my_face.u_domain_end > my_face.u_domain_start  # u max > u min
+    assert my_face.v_domain_end > my_face.v_domain_start  # v max > v min
 
     u_domain_start = domain[0]
     u_domain_end = domain[1]

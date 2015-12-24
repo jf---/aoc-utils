@@ -328,6 +328,14 @@ class Edge(aocutils.brep.base.BaseObject):
         """
         return self.adaptor.FirstParameter(), self.adaptor.LastParameter()
 
+    @property
+    def domain_start(self):
+        return self.domain[0]
+
+    @property
+    def domain_end(self):
+        return self.domain[1]
+
     def length(self, lbound=None, ubound=None, tolerance=aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE):
         r"""Curve length
 
@@ -693,25 +701,29 @@ class Edge(aocutils.brep.base.BaseObject):
 
         Parameters
         ----------
-        u
+        u : float
 
         Returns
         -------
-        float
-            The radius at u
+        OCC.gp.gp_Pnt
 
         Raises
         ------
-        RuntimeError
-            If the curvature is not defined
+        aocutils.exceptions.UndefinedPropertyException
+            If the radius is not defined
 
         """
         self._check_u_in_domain(u)
         # NOT SO SURE IF THIS IS THE SAME THING!!!
         self.brep_local_props.SetParameter(u)
         pnt = OCC.gp.gp_Pnt()
-        self.brep_local_props.CentreOfCurvature(pnt)
-        return pnt
+        try:
+            self.brep_local_props.CentreOfCurvature(pnt)
+            return pnt
+        except RuntimeError:
+            msg = "Undefined radius for the edge"
+            logger.error(msg)
+            raise aocutils.exceptions.UndefinedPropertyException(msg)
 
     def curvature(self, u):
         r"""Curvature at u

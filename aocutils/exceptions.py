@@ -9,6 +9,11 @@ class AocUtilsException(Exception):
     pass
 
 
+class UndefinedPropertyException(AocUtilsException):
+    r"""A property is undefined (e.g.centre of curvature of a flat plate)"""
+    pass
+
+
 class ParameterOutOfDomainException(AocUtilsException):
     r"""A function was invoked with a parameter outside of the object parameter domain"""
     pass

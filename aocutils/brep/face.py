@@ -205,6 +205,22 @@ class Face(aocutils.brep.base.BaseObject):
         """
         return OCC.BRepTools.breptools_UVBounds(self._wrapped_instance)
 
+    @property
+    def u_domain_start(self):
+        return self.domain[0]
+
+    @property
+    def u_domain_end(self):
+        return self.domain[1]
+
+    @property
+    def v_domain_start(self):
+        return self.domain[2]
+
+    @property
+    def v_domain_end(self):
+        return self.domain[3]
+
     def _midpoint(self):
         """u, v parameters at the mid point of the face, and its corresponding gp_Pnt
 
