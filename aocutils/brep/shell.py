@@ -1,15 +1,6 @@
 # coding: utf-8
 
 r"""shell module of occutils
-
-Classes
--------
-Shell
-    check()
-    analyse()
-    faces()
-    wires()
-    edges()
 """
 
 import logging
@@ -55,9 +46,34 @@ class Shell(aocutils.brep.base.BaseObject):
 
     def check(self):
         r"""Super class abstract method implementation"""
-        # super(Shell, self).check()
-        # todo : call BRepCheck_Shell methods
-        return OCC.BRepCheck.BRepCheck_Shell(self._wrapped_instance)
+        shell_check = OCC.BRepCheck.BRepCheck_Shell(self._wrapped_instance)
+        check_orientation = shell_check.Orientation()
+
+        if check_orientation != OCC.BRepCheck.BRepCheck_NoError:
+            return False
+        else:
+            return True
+
+    @property
+    def is_closed(self):
+        r"""Is the shell closed?
+
+        Returns
+        -------
+        bool
+            True if closed, False otherwise
+
+        """
+        shell_check = OCC.BRepCheck.BRepCheck_Shell(self._wrapped_instance)
+        check_closed = shell_check.Closed()
+        if check_closed == OCC.BRepCheck.BRepCheck_NoError:
+            return True
+        else:
+            return False
+
+    @property
+    def is_open(self):
+        return not self.is_closed
 
     def analyse(self):
         r"""Bad edges of the shell"""

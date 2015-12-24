@@ -28,8 +28,7 @@ examples/geomplate.py
 
 brep
 ----
-******** u, v parameters checks against domain
-call the BRepCheck methods for every type + test
+******** call the BRepCheck methods for every type + test
 
 brep/edge.py
 ------------

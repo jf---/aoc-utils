@@ -65,12 +65,6 @@ class Edge(aocutils.brep.base.BaseObject):
     def topods_edge(self):
         return self._wrapped_instance
 
-    def check(self):
-        r"""Super class abstract method implementation"""
-        #super(Edge, self).check()
-        # todo : call BRepCheck_Edge methods
-        return OCC.BRepCheck.BRepCheck_Edge(self._wrapped_instance)
-
     @property
     def adaptor(self):
         r"""Adaptor

@@ -50,13 +50,12 @@ class Solid(aocutils.brep.base.BaseObject):
 
     @property
     def topods_solid(self):
-        return self._wrapped_instance
+        r"""Wrapped solid
 
-    def check(self):
-        r"""Super class abstract method implementation"""
-        # super(Solid, self).check()
-        # todo : call BRepCheck_Face methods
-        return OCC.BRepCheck.BRepCheck_Solid(self._wrapped_instance)
+        Returns
+        -------
+        OCC.TopoDS.TopoDS_Solid"""
+        return self._wrapped_instance
 
     def shells(self):
         r"""Shells making the solid

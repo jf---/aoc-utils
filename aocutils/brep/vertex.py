@@ -78,12 +78,6 @@ class Vertex(aocutils.brep.base.BaseObject):
     def topods_vertex(self):
         return self._wrapped_instance
 
-    def check(self):
-        r"""Super class abstract method implementation"""
-        # super(Vertex, self).check()
-        # todo : call BRepCheck_Vertex methods
-        return OCC.BRepCheck.BRepCheck_Vertex(self._wrapped_instance)
-
     def _update(self):
         """
 

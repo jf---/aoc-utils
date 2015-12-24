@@ -49,9 +49,19 @@ class Wire(aocutils.brep.base.BaseObject):
 
     def check(self):
         r"""Super class abstract method implementation"""
-        # super(Wire, self).check()
-        # todo : call BRepCheck_Face methods
-        return OCC.BRepCheck.BRepCheck_Wire(self._wrapped_instance)
+        wire_check = OCC.BRepCheck.BRepCheck_Wire(self._wrapped_instance)
+        check_orientation = wire_check.Orientation(OCC.TopoDS.TopoDS_Face())  # call with Null face
+
+        # Buggy SelfIntersect ?
+        # edge_1 = OCC.TopoDS.TopoDS_Edge()
+        # edge_2 = OCC.TopoDS.TopoDS_Edge()
+        # check_self_intersect = wire_check.SelfIntersect(OCC.TopoDS.TopoDS_Face(), edge_1, edge_2)
+
+        if check_orientation != OCC.BRepCheck.BRepCheck_NoError:
+            # check_self_intersect != OCC.BRepCheck.BRepCheck_NoError):
+            return False
+        else:
+            return True
 
     def to_curve(self, tolerance=aocutils.tolerance.OCCUTILS_DEFAULT_TOLERANCE, order=OCC.GeomAbs.GeomAbs_C2,
                  max_segment=200, max_order=12):

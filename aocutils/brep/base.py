@@ -1,10 +1,11 @@
 # coding: utf-8
 
-r"""base.py module of occutils
+r"""base.py module of aocutils
 
-Classes
+Summary
 -------
-BaseObject
+
+BaseObject is inherited by Vertex, Edge, Face, Shell, Solid
 
 """
 
@@ -139,15 +140,9 @@ class BaseObject(object):
         r"""Topological geom_type"""
         return aocutils.types.topo_types_dict[self._wrapped_instance.ShapeType()]
 
-    # def check(self):
-    #     """Check"""
-    #     # _check = dict(vertex=OCC.BRepCheck.BRepCheck_Vertex, edge=OCC.BRepCheck.BRepCheck_Edge,
-    #     #               wire=OCC.BRepCheck.BRepCheck_Wire, face=OCC.BRepCheck.BRepCheck_Face,
-    #     #               shell=OCC.BRepCheck.BRepCheck_Shell)
-    #     # _check[self.topo_type]
-    #     # BRepCheck will be able to inform *what* actually is the matter,
-    #     # though implementing this still is a bit of work...
-    #     raise NotImplementedError
+    def check(self):
+        """Some subclasses may implement this method ... but some may not"""
+        raise NotImplementedError
 
     @property
     def is_valid(self):

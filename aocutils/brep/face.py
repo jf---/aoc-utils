@@ -68,9 +68,17 @@ class Face(aocutils.brep.base.BaseObject):
 
     def check(self):
         r"""Check the face"""
-        # super(Face, self).check()
-        # todo : call BRepCheck_Face methods
-        return OCC.BRepCheck.BRepCheck_Face(self._wrapped_instance)
+        check_face = OCC.BRepCheck.BRepCheck_Face(self._wrapped_instance)
+        check_intersect_wires = check_face.IntersectWires()
+        check_classify_wires = check_face.ClassifyWires()
+        check_orientation_of_wires = check_face.OrientationOfWires()
+        if (check_intersect_wires != OCC.BRepCheck.BRepCheck_NoError or
+            check_classify_wires != OCC.BRepCheck.BRepCheck_NoError or
+            check_orientation_of_wires != OCC.BRepCheck.BRepCheck_NoError):
+
+            return False
+        else:
+            return True
 
     # aliasing of useful methods
     @property

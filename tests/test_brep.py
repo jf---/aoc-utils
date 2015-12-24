@@ -24,6 +24,7 @@ import aocutils.brep.shell
 import aocutils.brep.wire
 import aocutils.brep.face
 import aocutils.brep.base
+import aocutils.exceptions
 
 
 PY3 = not (int(sys.version.split('.')[0]) <= 2)
@@ -134,6 +135,7 @@ def test_edge_sphere(sphere_shape):
     assert my_edge.tolerance == 1e-06
 
     # check the aocutils Edge
+    # assert my_edge.check() is True
     assert my_edge.length() > 0.
     assert my_edge.domain[1] > my_edge.domain[0]
 
@@ -170,7 +172,11 @@ def test_edge_sphere(sphere_shape):
     assert isinstance(my_edge.derivative(domain_middle, 2), OCC.gp.gp_Vec)
     assert isinstance(my_edge.derivative(domain_end, 3), OCC.gp.gp_Vec)
 
-    # TODO: radius and normal outside of domain
+    # radius and normal outside of domain
+    with pytest.raises(aocutils.exceptions.ParameterOutOfDomainException):
+        my_edge.radius(9999.)
+    with pytest.raises(aocutils.exceptions.ParameterOutOfDomainException):
+        my_edge.normal(9999.)
 
 
 def test_face_flat(box_shape):
@@ -193,6 +199,7 @@ def test_face_flat(box_shape):
     my_face = aocutils.brep.face.Face(face_0)
 
     # check the aocutils Face
+    assert my_face.check() is True
     assert my_face.tolerance == 1e-06
     assert my_face.is_u_periodic is False
     assert my_face.is_v_periodic is False
@@ -275,6 +282,7 @@ def test_wire(box_shape):
     my_wire = aocutils.brep.wire.Wire(wire)
 
     # check the aocutils Wire
+    assert my_wire.check() is True
     assert my_wire.tolerance == 1e-06
 
     curve = aocutils.brep.wire.Wire(wire).to_curve()
@@ -318,6 +326,9 @@ def test_shell(box_shape):
     my_shell = aocutils.brep.shell.Shell(OCC.BRepPrimAPI.BRepPrimAPI_MakeBox(box_x_dim, box_y_dim, box_z_dim).Shell())
 
     # check the aocutils Shell
+    assert my_shell.check() is True
+    assert my_shell.is_closed is True
+    assert my_shell.is_open is False
     assert my_shell.tolerance == 1e-06
 
 
