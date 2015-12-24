@@ -8,8 +8,27 @@ import logging
 
 import OCC.Display.SimpleGui
 import OCC.AIS
+import OCC.Quantity
 
 logger = logging.getLogger(__name__)
+
+
+def colored_and_transparent(display, object, color=OCC.Quantity.Quantity_NOC_AQUAMARINE4, transparency=0.5):
+    r"""Display an object with color and transparency using AIS
+
+    Parameters
+    ----------
+    display
+    object
+    color
+    transparency
+
+    """
+    ais_shp = OCC.AIS.AIS_Shape(object)
+    ais_shp.SetTransparency(transparency)
+    ais_shp.SetColor(color)
+    ais_context = display.GetContext().GetObject()
+    ais_context.Display(ais_shp.GetHandle())
 
 
 def show(shape, backend=None):
