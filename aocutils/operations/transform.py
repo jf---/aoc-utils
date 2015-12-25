@@ -59,7 +59,7 @@ def rotate(brep, axe, degree, copy=False):
     brep : OCC.TopoDS.TopoDS_*
     axe : OCC.gp.gp_Ax1
     degree : float
-        Rotation angle
+        Rotation angle in degrees
     copy : bool
 
     Returns
