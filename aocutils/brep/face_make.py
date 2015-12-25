@@ -30,6 +30,7 @@ import OCC.gp
 import aocutils.brep.base
 import aocutils.common
 import aocutils.brep.edge
+import aocutils.brep.wire_make
 import aocutils.topology
 import aocutils.exceptions
 
@@ -54,6 +55,17 @@ def face(*args):
         result = a_face.Face()
         a_face.Delete()
         return result
+
+
+def from_points(points_list):
+    r"""Make a face from n points
+
+    Parameters
+    ----------
+    points_list : list[OCC.gp.gp_Pnt]
+    """
+    poly = aocutils.brep.wire_make.closed_polygon(points_list)  # poly is a OCC.TopoDS.TopoDS_Wire
+    return face(poly)
 
 
 def ruled(edge_a, edge_b):
