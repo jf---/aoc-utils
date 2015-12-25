@@ -29,6 +29,11 @@ class BooleanCutException(AocUtilsException):
     pass
 
 
+class BooleanCommonException(AocUtilsException):
+    r"""Something went wrong with a boolean common"""
+    pass
+
+
 class OffsetShapeException(AocUtilsException):
     r"""Something went wrong with an offset shape"""
     pass
