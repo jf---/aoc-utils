@@ -13,6 +13,10 @@ geom
 
 Python 3 tests
 
+analyze
+-------
+global properties of compound
+
 examples
 --------
 add example with handles ...

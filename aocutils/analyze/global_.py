@@ -27,7 +27,7 @@ class GlobalProperties(object):
     shape : OCC.TopoDS.TopoDS_Shape
 
     """
-
+    # TODO : how to handle compound ?
     linear_types = ["edge", "wire"]
     surfacic_types = ["face", "shell"]
     volumic_types = ["solid"]
@@ -44,7 +44,7 @@ class GlobalProperties(object):
 
     @property
     def system(self):
-        r"""Initialise the GProp_GProps depending on the topological geom_type
+        r"""Initialise the GProp_GProps depending on the topological type
 
         Notes
         -----
@@ -63,6 +63,10 @@ class GlobalProperties(object):
             OCC.BRepGProp.brepgprop_LinearProperties(self.shape, self._system)
         elif self._topo_type in GlobalProperties.volumic_types:
             OCC.BRepGProp.brepgprop_VolumeProperties(self.shape, self._system)
+        else:
+            msg = "ShapeType is not linear, surfacic or volumic"
+            logger.error(msg)
+            raise aocutils.exceptions.WrongTopologicalType(msg)
         return self._system
 
     @property
