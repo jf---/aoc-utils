@@ -107,7 +107,7 @@ def plane(center=OCC.gp.gp_Pnt(0, 0, 0), vec_normal=OCC.gp.gp_Vec(0, 0, 1), exte
         # noinspection PyUnresolvedReferences
         center = center.add_vec(OCC.gp.gp_Vec(0, 0, depth))
     # noinspection PyUnresolvedReferences
-    pln = OCC.gp.gp_Pln(center, vec_normal.as_dir())
+    pln = OCC.gp.gp_Pln(center, OCC.gp.gp_Dir(vec_normal.X(), vec_normal.Y(), vec_normal.Z()))
     a_face = face(pln, extent_x_min, extent_x_max, extent_y_min, extent_y_max)
     return a_face
 
